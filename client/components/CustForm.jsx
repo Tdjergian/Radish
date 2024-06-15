@@ -108,7 +108,7 @@ const RedisForm = () => {
             type="checkbox"
             value={true}
           />
-          <label for="appendonly">Enable appendonly (AOF) mode</label>
+          <label htmlFor="appendonly">Enable appendonly (AOF) mode</label>
         </div>
 
         <div className="redis-form-input">
