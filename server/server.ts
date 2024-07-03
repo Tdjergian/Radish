@@ -57,12 +57,10 @@ app.post('/api/createFiles', createFiles, (req : Request, res: Response) => {
     res.status(200).send('Files created successfully');
 });
 
-
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
 app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
     res.status(200).json(res.locals.pricingTermsArray);
 }); 
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
