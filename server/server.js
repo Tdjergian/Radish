@@ -160,15 +160,15 @@ app.post('/test/getPricing', async (req, res) => {
     console.log('Request headers:', req.headers);
     console.log('Request body:', req.body);
 
-    const { region, instanceType, os, shardsValue, replicasValue } = req.body;
+    const { region, serverType, operatingSystem, shardsValue, replicasValue } = req.body;
  
     const instanceCount = shardsValue * replicasValue;
     
-    if (!region || !instanceType || !os || !shardsValue || !replicasValue) {
+    if (!region || !serverType || !operatingSystem || !shardsValue || !replicasValue) {
         return res.status(400).send('Must select an AWS EC2 instance type, quantity, and region from drop down menu');
     }
  
-    console.log(region, instanceType, os, shardsValue, replicasValue)
+    console.log(region, serverType, operatingSystem, shardsValue, replicasValue)
 
     // Helper function to get region name
     function getRegionName(regionCode) {
@@ -188,11 +188,11 @@ app.post('/test/getPricing', async (req, res) => {
         const params = {
             ServiceCode: 'AmazonEC2',
             Filters: [
-                { Type: 'TERM_MATCH', Field: 'instanceType', Value: instanceType },
+                { Type: 'TERM_MATCH', Field: 'instanceType', Value: serverType },
                 { Type: 'TERM_MATCH', Field: 'productFamily', Value: 'Compute Instance' },
                 { Type: 'TERM_MATCH', Field: 'location', Value: getRegionName(region) },
                 { Type: 'TERM_MATCH', Field: 'preInstalledSw', Value: 'NA' },
-                { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: os }
+                { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }
             ]
         };
 

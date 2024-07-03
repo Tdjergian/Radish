@@ -1,11 +1,16 @@
+// AwsPricingList.jsx
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-const AwsPricingList = ({ pricingData }) => {
+const AwsPricingList = () => {
+  // Fetch pricing data from Redux store
+  const pricingData = useSelector(state => state.aws.pricingData);
+
   return (
     <div className="aws-pricing-list">
-      <table>
-        <thead>
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
           <tr>
             <th>ID</th>
             <th>Description</th>
@@ -18,26 +23,33 @@ const AwsPricingList = ({ pricingData }) => {
             <th>Monthly Total Price</th>
           </tr>
         </thead>
-        <tbody>
-          {pricingData.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.description}</td>
-              <td>{item.paymentTerms}</td>
-              <td>{item.purchaseOption}</td>
-              <td>{item.pricePerUnit}</td>
-              <td>{item.unit}</td>
-              <td>{item.leaseContractLength}</td>
-              <td>{item.upfrontFee}</td>
-              <td>{item.monthlyTotalPrice}</td>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {pricingData.length > 0 ? (
+            pricingData.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.description}</td>
+                <td>{item.paymentTerms}</td>
+                <td>{item.purchaseOption}</td>
+                <td>{item.pricePerUnit}</td>
+                <td>{item.unit}</td>
+                <td>{item.leaseContractLength}</td>
+                <td>{item.upfrontFee}</td>
+                <td>{item.monthlyTotalPrice}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="9" className="text-center py-4 text-gray-500">No pricing data available.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
   );
 };
 
+// Optional PropTypes validation if needed
 AwsPricingList.propTypes = {
   pricingData: PropTypes.arrayOf(
     PropTypes.shape({
