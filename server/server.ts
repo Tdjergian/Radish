@@ -8,6 +8,7 @@ const Redis = require("ioredis");
 const {
   connectUserRedis,
   getMemory,
+  getUsedCPU,
 } = require("./controllers/performanceController");
 
 const app = express();
@@ -73,10 +74,16 @@ app.post("/getPricing", getEC2Pricing, (req: Request, res: Response) => {
   res.status(200).json(res.locals.pricingTermsArray);
 });
 
-app.post("/connect-redis", connectUserRedis, getMemory, (req, res) => {
-  //res.status(200).send("connect to redis");
-  res.status(200).json(res.locals.memory);
-});
+app.post(
+  "/connect-redis",
+  connectUserRedis,
+  getMemory,
+  getUsedCPU,
+  (req, res) => {
+    //res.status(200).send("connect to redis");
+    res.status(200).json(res.locals.memory);
+  }
+);
 
 // app.get("/get-memory", getMemory, (req, res) => {
 //   res.status(200).json(res.locals.memory);

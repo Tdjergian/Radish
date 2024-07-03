@@ -73,4 +73,30 @@ performanceController.getMemory = async (
   }
 };
 
+performanceController.getUsedCPU = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const redisClient = res.locals.redisClient;
+    if (!redisClient) {
+      throw new Error("Redis client is not available");
+    }
+    const stats = await redisClient.info("CPU");
+    const metrics: string[] = stats.split("\r\n");
+    let usedCPU = metrics.find((str) => str.startsWith("used_cpu_user"));
+    if (usedCPU) usedCPU = usedCPU.slice(usedCPU.indexOf(":") + 1).trim();
+    console.log("usedCPU", usedCPU);
+    res.locals.getUsedCPU = { usedCPU: usedCPU };
+    next();
+  } catch (err) {
+    return next({
+      log: `redisController.getResponseTimes error ${err}`,
+      message: `could not get Response Times`,
+      status: 500,
+    });
+  }
+};
+
 module.exports = performanceController;
