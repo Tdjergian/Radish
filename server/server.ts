@@ -9,6 +9,7 @@ const {
   connectUserRedis,
   getMemory,
   getUsedCPU,
+  disconnectRedis,
 } = require("./controllers/performanceController");
 
 const app = express();
@@ -74,20 +75,17 @@ app.post("/getPricing", getEC2Pricing, (req: Request, res: Response) => {
   res.status(200).json(res.locals.pricingTermsArray);
 });
 
-app.post(
-  "/connect-redis",
-  connectUserRedis,
-  getMemory,
-  getUsedCPU,
-  (req, res) => {
-    //res.status(200).send("connect to redis");
-    res.status(200).json(res.locals.memory);
-  }
-);
+app.post("/memory", connectUserRedis, getMemory, (req, res) => {
+  //res.status(200).send("connect to redis");
+  console.log("backend", res.locals.memory);
+  res.status(200).json(res.locals.memory);
+});
 
-// app.get("/get-memory", getMemory, (req, res) => {
-//   res.status(200).json(res.locals.memory);
-// });
+app.post("/cpu", connectUserRedis, getUsedCPU, (req, res) => {
+  //res.status(200).send("connect to redis");
+  console.log("back end", res.locals.getUsedCPU);
+  res.status(200).json(res.locals.getUsedCPU);
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

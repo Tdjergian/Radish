@@ -32,6 +32,22 @@ performanceController.connectUserRedis = async (
   }
 };
 
+performanceController.disconnectRedis = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await res.locals.redisClient.disconnect();
+  } catch (err) {
+    return next({
+      log: `redisController.disconnectRedis error ${err}`,
+      message: `could not disconnect to Redis instance`,
+      status: 500,
+    });
+  }
+};
+
 performanceController.getMemory = async (
   req: Request,
   res: Response,
