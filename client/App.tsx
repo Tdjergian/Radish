@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from 'react-router-dom';
-import Header from "./components/Header.jsx";
-import Sidebar from "./components/Sidebar.tsx";
+import Header from "./components/Header"; // Removed .jsx extension
+import Sidebar from "./components/Sidebar"; // Changed to .tsx extension for TypeScript file
 import "../public/style.css";
 
 function App() {
