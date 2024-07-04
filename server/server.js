@@ -4,12 +4,14 @@ const fs = require('fs');
 const path = require('path'); 
 const { createClient } = require('redis');
 const yaml = require('js-yaml');
-
 const aws = require('aws-sdk');
 
 
 const app = express();
-const port = 8080;
+const port = 80;
+
+const cors = require('cors');
+app.use(cors()); // Allow all origins when no options are specified
 
 
 // Load .env variables
@@ -66,7 +68,7 @@ if (process.env.USE_REDIS === 'true') {
 }
 
 // POST route to handle form submission and write redis.conf file
-app.post('/api/createFiles', (req, res) => {
+app.post('/test/createFiles', (req, res) => {
   console.log(req.body);
   // Destructure form data on req.body
   let { 
@@ -204,13 +206,21 @@ bind 0.0.0.0`;
 
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
-app.post('/getPricing', async (req, res) => {
-    const { region, instanceType, operatingSystem, instanceCount } = req.body;
+app.post('/test/getPricing', async (req, res) => {
+    console.log('Received POST request to /test/getPricing');
+    console.log('Request headers:', req.headers);
+    console.log('Request body:', req.body);
+
+    const { region, serverType, operatingSystem, shardsValue, replicasValue } = req.body;
  
-    if (!region || !instanceType || !instanceCount) {
+    const instanceCount = shardsValue * replicasValue;
+    
+    if (!region || !serverType || !operatingSystem || !shardsValue || !replicasValue) {
         return res.status(400).send('Must select an AWS EC2 instance type, quantity, and region from drop down menu');
     }
  
+    console.log(region, serverType, operatingSystem, shardsValue, replicasValue)
+
     // Helper function to get region name
     function getRegionName(regionCode) {
         const regions = {
@@ -218,7 +228,7 @@ app.post('/getPricing', async (req, res) => {
         'us-west-1': 'US West (N. California)',
         'us-west-2': 'US West (Oregon)',
         };
-        return regions[regionCode] || null;
+        return regions[regionCode] || regionCode;
     }
  
     try {
@@ -229,15 +239,18 @@ app.post('/getPricing', async (req, res) => {
         const params = {
             ServiceCode: 'AmazonEC2',
             Filters: [
-                { Type: 'TERM_MATCH', Field: 'instanceType', Value: instanceType },
+                { Type: 'TERM_MATCH', Field: 'instanceType', Value: serverType },
                 { Type: 'TERM_MATCH', Field: 'productFamily', Value: 'Compute Instance' },
                 { Type: 'TERM_MATCH', Field: 'location', Value: getRegionName(region) },
                 { Type: 'TERM_MATCH', Field: 'preInstalledSw', Value: 'NA' },
-                // { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }
+                { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }
             ]
         };
+
+        console.log(params)
  
         const data = await pricing.getProducts(params).promise();
+        // console.log(data)
         // Uncomment the following line if you want to see the raw response from AWS Pricing API.
         // return res.json(data);
  
