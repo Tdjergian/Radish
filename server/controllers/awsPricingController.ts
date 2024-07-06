@@ -15,20 +15,11 @@ aws.config.update({
 const awsPricingController: { [key: string]: (req: Request, res: Response, next: NextFunction) => void } = {};
 
 awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: NextFunction) => {
-  const { region, instanceType, operatingSystem, instanceCount } = req.body;
+  const { region, serverType, operatingSystem, shardsValue, replicasValue } = req.body;
+  const instanceCount = shardsValue * replicasValue;
 
-  if (!region || !instanceType || !instanceCount) {
+  if (!region || !serverType || !operatingSystem ||!shardsValue || !replicasValue) {
       return res.status(400).send('Must select an AWS EC2 instance type, quantity, and region from drop down menu');
-  }
-
-  // Helper function to get region name
-  function getRegionName(regionCode: string) {
-      const regions: {[key: string]: string} = {
-      'us-east-1': 'US East (N. Virginia)',
-      'us-west-1': 'US West (N. California)',
-      'us-west-2': 'US West (Oregon)',
-      };
-      return regions[regionCode] || null;
   }
 
   try {
@@ -39,11 +30,11 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
       const params = {
           ServiceCode: 'AmazonEC2',
           Filters: [
-              { Type: 'TERM_MATCH', Field: 'instanceType', Value: instanceType },
+              { Type: 'TERM_MATCH', Field: 'instanceType', Value: serverType },
               { Type: 'TERM_MATCH', Field: 'productFamily', Value: 'Compute Instance' },
-              { Type: 'TERM_MATCH', Field: 'location', Value: getRegionName(region) },
+              { Type: 'TERM_MATCH', Field: 'location', Value: region },
               { Type: 'TERM_MATCH', Field: 'preInstalledSw', Value: 'NA' },
-              // { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }
+              { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }
           ]
       };
 
@@ -58,7 +49,6 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
 
       type Product = typeof priceList[0];
       interface PricingTerm {
-            id: number;
             paymentTerms: string;
             description: string;
             purchaseOption: string;
@@ -70,7 +60,6 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
       }
 
       const pricingTermsArray: PricingTerm[] = [];
-      let idCounter = 1;
 
       priceList.forEach((product: Product, index: number) => {
           // const operatingSystem = product.attributes.operatingSystem;
@@ -86,7 +75,6 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
                       const pricePerUnit = parseFloat(priceDimension.pricePerUnit.USD);
 
                       pricingTermsArray.push({
-                          id: idCounter++,
                           description: priceDimension.description,
                           paymentTerms: 'OnDemand',
                           purchaseOption: 'N/A', // OnDemand instances typically do not have purchase options
@@ -132,7 +120,6 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
                       }
 
                       pricingTermsArray.push({
-                          id: idCounter++,
                           paymentTerms: 'Reserved',
                           description: priceDimension.description,
                           purchaseOption: purchaseOption,
