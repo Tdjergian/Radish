@@ -1,0 +1,48 @@
+#!/bin/bash
+
+AWS_REGION=us-west-2
+AWS_ACCOUNT_ID=
+ECR_REGISTRY_IMAGE=redis
+IMAGE_TAG_NAME=latest
+
+echo "hello world"
+
+# ls -l .
+
+# aws ec2 start
+
+
+
+# for i in $(seq 1 2)
+# do
+#     # aws ec2 status
+#     # echo "Waiting for ec2"
+#     sleep 1
+# done
+
+echo "to do ec2 start withmounted confs"
+
+while true; 
+do
+    # Capture the fifth column output in a variable
+    status=$(docker ps | grep moby | awk '{print $5}')
+
+    # Echo the variable
+    echo "$status"
+
+
+    if [[ "$status" == "0" ]]; then
+        echo "up"
+        break
+    else
+        echo "Waiting, current status $status"
+        echo "Sleeping for 5 seconds..."
+        sleep 5
+    fi
+done
+
+
+docker pull redis:latest
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+docker tag redis:latest $ECR_REGISTRY_IMAGE:$IMAGE_TAG_NAME
+docker push $ECR_REGISTRY_IMAGE:$IMAGE_TAG_NAME
