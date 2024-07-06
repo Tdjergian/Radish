@@ -6,7 +6,7 @@ import { MdOutlineMonitorHeart } from "react-icons/md";
 import { GrDocumentConfig } from "react-icons/gr";
 import { IoIosMenu } from "react-icons/io";
 
-const Sidebar: FC =  (): ReactElement => {
+const Sidebar: FC = (): ReactElement => {
   return (
     <nav className="bg-gray-800 text-white w-64 min-h-screen">
       <div className="px-4 py-6">
@@ -22,7 +22,10 @@ const Sidebar: FC =  (): ReactElement => {
           <li>
             <div className="flex items-center">
               <GiDiamondTrophy className="text-gray-300" />
-              <Link to="/pricing" className="text-gray-300 hover:text-white ml-2">
+              <Link
+                to="/pricing"
+                className="text-gray-300 hover:text-white ml-2"
+              >
                 Pricing
               </Link>
             </div>
@@ -30,16 +33,19 @@ const Sidebar: FC =  (): ReactElement => {
           <li>
             <div className="flex items-center">
               <MdOutlineMonitorHeart className="text-gray-300" />
-              <a href="#" className="text-gray-300 hover:text-white ml-2">
+              <Link
+                to="/performance"
+                className="text-gray-300 hover:text-white ml-2"
+              >
                 Performance
-              </a>
+              </Link>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <FaDocker className="text-gray-300  " />
               <a href="#" className="text-gray-300 hover:text-white ml-2">
-                 Docker
+                Docker
               </a>
             </div>
           </li>
@@ -47,5 +53,5 @@ const Sidebar: FC =  (): ReactElement => {
       </div>
     </nav>
   );
-}
+};
 export default Sidebar;

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 const { createClient } = require("redis");
-
+require("dotenv").config();
 interface RedisRequestBody {
   host: string;
   port: number;
@@ -14,7 +14,10 @@ performanceController.connectUserRedis = async (
   next: NextFunction
 ) => {
   try {
-    const { host, port, redisPassword } = req.body;
+    let { host, port, redisPassword } = req.body;
+    host = host || process.env.HOST;
+    port = port || process.env.PORT;
+    redisPassword = redisPassword || process.env.REDIS_PASSWORD;
     const redisClient = createClient({
       password: redisPassword,
       socket: { host, port },
