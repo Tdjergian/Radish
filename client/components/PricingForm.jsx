@@ -55,7 +55,7 @@ const PricingForm = () => {
     dispatch(setError(''));
 
     try {
-      const response = await fetch('/test/getPricing', {
+      const response = await fetch('/api/getPricing', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
