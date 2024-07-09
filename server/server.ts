@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const { createClient } = require('redis');
 const { createFiles } = require('./controllers/fileGenerationController');
 const { getEC2Pricing } = require('./controllers/awsPricingController');
+const { createTaskDefinition } = require('./controllers/taskConfigurationController');
 
 
 const app = express();
@@ -62,6 +63,10 @@ app.post('/api/createFiles', createFiles, (req : Request, res: Response) => {
 app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
     res.status(200).json(res.locals.pricingTermsArray);
 }); 
+
+app.post('/api/createTaskDefinition', createTaskDefinition, (req: Request, res: Response) => {
+    res.status(200).send('Task definition created successfully');
+});
 
 
 app.listen(port, () => {
