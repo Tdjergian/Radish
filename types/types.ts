@@ -65,3 +65,12 @@ export interface MountPoint {
 
 
 // Example dockerCompose object
+
+export interface MemoryData {
+  usedMemory: number;
+  peakUsedMemory: number;
+}
+
+export interface CPUData {
+  usedCPU: number;
+}
