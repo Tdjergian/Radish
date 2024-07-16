@@ -53,6 +53,8 @@ export interface ContainerDefinition {
 
 export interface PortMapping {
   containerPort: number;
+  hostPort: number;
+  protocol: string;
 }
 
 export interface MountPoint {

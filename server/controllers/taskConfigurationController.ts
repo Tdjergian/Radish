@@ -53,6 +53,8 @@ taskConfigurationController.createTaskDefinition = (req: Request, res: Response,
         portMappings: [
           {
             containerPort: 6379,
+            hostPort: 6379,
+            protocol: 'tcp'
           }
         ],
         mountPoints: [
