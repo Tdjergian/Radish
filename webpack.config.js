@@ -1,5 +1,5 @@
 const path = require("path");
-
+const Dotenv = require("dotenv-webpack");
 module.exports = {
   mode: "development",
   entry: path.resolve(__dirname, "client/index.js"),
@@ -13,14 +13,21 @@ module.exports = {
     },
     port: 3000,
     open: true,
-    proxy: [{
-      context: ['/api'],
-      target: 'http://localhost:8080',
-    }]
+    proxy: [
+      {
+        context: ["/api"],
+        target: "http://localhost:8080",
+      },
+    ],
   },
   resolve: {
     modules: [path.resolve(__dirname, "node_modules")],
     extensions: [".js", ".jsx", ".ts", ".tsx"],
+    fallback: {
+      fs: false,
+      os: false,
+      path: false,
+    },
   },
   module: {
     rules: [
@@ -50,4 +57,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new Dotenv()],
 };
