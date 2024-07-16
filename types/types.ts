@@ -33,6 +33,35 @@ export interface Ipam {
   [key: string]: unknown; // for additional properties
 }
 
+export interface TaskDefinition {
+  family: string;
+  networkMode: string;
+  ContainerDefinitions: any[];
+  volumes: any[];
+}
+
+export interface ContainerDefinition {
+  name: string;
+  image: string;
+  memory: number;
+  cpu: number;
+  essential: boolean;
+  command: string[];
+  portMappings: PortMapping[];
+  mountPoints: MountPoint[];
+}
+
+export interface PortMapping {
+  containerPort: number;
+}
+
+export interface MountPoint {
+  sourceVolume: string;
+  containerPath: string;
+}
+
+
+
 // Example dockerCompose object
 
 export interface MemoryData {

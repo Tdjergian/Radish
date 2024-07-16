@@ -71,9 +71,12 @@ app.post("/api/createFiles", createFiles, (req: Request, res: Response) => {
 });
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
+app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
+    res.status(200).json(res.locals.pricingTermsArray);
+}); 
 
-app.post("/api/getPricing", getEC2Pricing, (req: Request, res: Response) => {
-  res.status(200).json(res.locals.pricingTermsArray);
+app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
+    res.status(200).send('Task definition created successfully');
 });
 
 app.post("/api/memory", connectUserRedis, getMemory, (req, res) => {
