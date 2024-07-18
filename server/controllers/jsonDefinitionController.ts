@@ -51,8 +51,57 @@ jsonDefinitionController.createTaskDefinition = (req: Request, res: Response, ne
   next();
 }
 
-jsonDefinitionController.createServiceDefinition = (req: Request, res: Response, next: NextFunction) => {
+jsonDefinitionController.createSecurityGroupDefinition = (req: Request, res: Response, next: NextFunction) => {
+  const { vpcID } = req.body;
+
+  const outputDir: string = path.join(__dirname, '../output/json-definitions');
+  const SecurityGroupDefinition = {
+    Description: 'Security group for Redis nodes',
+    VpcId: vpcID,
+    GroupName: 'redis-security-group',
+    Ingress: [
+      {
+        IpProtocol: 'tcp',
+        FromPort: 6379,
+        ToPort: 6379,
+        IpRanges: [
+          {
+            CidrIp: '0.0.0.0/16'
+          },
+        ],
+      },
+      {
+        IpProtocol: 'tcp',
+        FromPort: 16379,
+        ToPort: 16379,
+        IpRanges: [
+          {
+            CidrIp: '0.0.0.0/16'
+          }
+        ]
+      }
+    ], 
+    Egress: [
+      {
+        IpProtocol: 'tcp',
+        IpRanges: [
+          {
+            CidrIp: '0.0.0.0/0'
+          }
+        ]
+      }
+    ]
+  }
   
+  fs.writeFile(`${outputDir}/securityGroupDefinition.json`, JSON.stringify(SecurityGroupDefinition, null, 2), (err: Error) => {
+    if (err) {
+      console.error('Error writing security group definition:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+    console.log('Security group definition written successfully');
+    next();
+  });
+
 }
 
 module.exports = jsonDefinitionController;
