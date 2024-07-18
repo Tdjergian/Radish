@@ -1,7 +1,6 @@
 import React from "react";
-import Slider from "../Components/Slider";
+import Slider from "../components/Slider";
 import "../../public/style.css";
-
 
 function MainPage() {
   return (

@@ -1,0 +1,10 @@
+FROM redis:latest
+
+WORKDIR /redis
+
+COPY server/output/redis-0-0.conf ./redis.conf
+
+CMD ["redis-server", "redis.conf"]
+
+EXPOSE 6379
+
