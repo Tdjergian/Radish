@@ -11,6 +11,8 @@ const {
   getUsedCPU,
   disconnectRedis,
 } = require("./controllers/performanceController");
+const { createSecurityGroupScript } = require("./controllers/bashScriptController");
+const { createSecurityGroupDefinition } = require("./controllers/jsonDefinitionController");
 
 const app = express();
 const port = 8080;
@@ -89,6 +91,10 @@ app.post("/api/cpu", connectUserRedis, getUsedCPU, (req, res) => {
   //res.status(200).send("connect to redis");
   console.log("back end", res.locals.getUsedCPU);
   res.status(200).json(res.locals.getUsedCPU);
+});
+
+app.post("/api/testSecurityGroup", createSecurityGroupScript, (req: Request, res: Response) => {
+    res.status(200).send("Security Group Created");
 });
 
 app.listen(port, () => {

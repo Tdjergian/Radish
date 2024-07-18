@@ -1,0 +1,36 @@
+{
+  "Description": "Security group for Redis nodes",
+  "GroupName": "redis-security-group",
+  "Ingress": [
+    {
+      "IpProtocol": "tcp",
+      "FromPort": 6379,
+      "ToPort": 6379,
+      "IpRanges": [
+        {
+          "CidrIp": "0.0.0.0/0"
+        }
+      ]
+    },
+    {
+      "IpProtocol": "tcp",
+      "FromPort": 16379,
+      "ToPort": 16379,
+      "IpRanges": [
+        {
+          "CidrIp": "0.0.0.0/0"
+        }
+      ]
+    },
+    {
+      "IpProtocol": "tcp",
+      "FromPort": 22,
+      "ToPort": 22,
+      "IpRanges": [
+        {
+          "CidrIp": "0.0.0.0/0"
+        }
+      ]
+    }
+  ]
+}
