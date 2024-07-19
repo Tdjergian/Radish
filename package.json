@@ -14,9 +14,11 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fontsource/roboto": "^5.0.13",
     "@influxdata/influxdb-client": "^1.33.2",
-    "@mui/icons-material": "^5.15.19",
-    "@mui/material": "^5.15.21",
+    "@mui/icons-material": "^5.16.4",
+    "@mui/material": "^5.16.4",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/ioredis": "^5.0.0",
     "aws-sdk": "^2.1642.0",
@@ -42,7 +44,8 @@
     "react-router-dom": "^6.23.1",
     "react-slider": "^2.0.6",
     "redis": "^4.6.15",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "styled-components": "^6.1.12"
   },
   "devDependencies": {
     "@babel/core": "^7.24.6",

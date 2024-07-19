@@ -8,6 +8,7 @@ import Main from "./container/Main";
 import PricingPage from "./Pages/PricingPage.jsx";
 import PricingForm from "./components/PricingForm.jsx";
 import Performance from "./components/Performance.tsx";
+import LandingPage from "./components/LandingPage.jsx";
 import "../public/style.css";
 
 const container = document.getElementById("app");
@@ -17,10 +18,11 @@ root.render(
   <Provider store={store}>
     <Router>
       <Routes>
+        <Route index element={<LandingPage />} />
         <Route path="/" element={<App />}>
-          <Route index element={<Main />} />
+          <Route path="/configuration" element={<Main />} />
           <Route path="/pricing" element={<PricingForm />} />
-          <Route path="/performance" element={<Performance />} />
+          {/* <Route path="/performance" element={<Performance />} /> */}
         </Route>
       </Routes>
     </Router>
