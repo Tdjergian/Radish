@@ -35,7 +35,6 @@ export default function LogoCollection() {
 
   return (
     <Box id="logoCollection" sx={{ py: 4 }}>
-      test test
       <Typography
         component="p"
         variant="subtitle2"
