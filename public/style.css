@@ -197,3 +197,7 @@ body {
 #redis-form option {
   color: black;
 }
+
+.tooltip {
+  max-width: 400px;
+}
