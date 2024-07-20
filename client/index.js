@@ -8,6 +8,10 @@ import Main from "./container/Main";
 import PricingPage from "./Pages/PricingPage.jsx";
 import PricingForm from "./components/PricingForm.jsx";
 import Performance from "./components/Performance.tsx";
+import Register from "./components/Register.jsx"
+import Login from "./components/Login.jsx"
+
+import "react-tooltip/dist/react-tooltip.css";
 import "../public/style.css";
 
 const container = document.getElementById("app");
@@ -19,6 +23,8 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Main />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
           <Route path="/pricing" element={<PricingForm />} />
           <Route path="/performance" element={<Performance />} />
         </Route>
