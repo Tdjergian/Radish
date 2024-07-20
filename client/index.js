@@ -19,11 +19,13 @@ root.render(
     <Router>
       <Routes>
         <Route index element={<LandingPage />} />
+
         <Route path="/" element={<App />}>
           <Route path="/configuration" element={<Main />} />
           <Route path="/pricing" element={<PricingForm />} />
-          {/* <Route path="/performance" element={<Performance />} /> */}
+          <Route path="/performance" element={<Performance />} />
         </Route>
+        
       </Routes>
     </Router>
   </Provider>
