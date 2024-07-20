@@ -5,12 +5,28 @@ const { createClient } = require("redis");
 const { createFiles } = require("./controllers/fileGenerationController");
 const { getEC2Pricing } = require("./controllers/awsPricingController");
 const Redis = require("ioredis");
+const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser');
+
 const {
   connectUserRedis,
   getMemory,
   getUsedCPU,
   disconnectRedis,
 } = require("./controllers/performanceController");
+
+// connect to MongoDB cluster
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(`${process.env.MONGO_URI}`);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+connectDB();
 
 const app = express();
 const port = 8080;
@@ -64,6 +80,9 @@ if (process.env.USE_REDIS === "true") {
     }
   });
 }
+
+app.use(cookieParser());
+app.use('/api/users', require('./routes/userRoutes'));
 
 // POST route to handle form submission and write redis.conf file
 app.post("/api/createFiles", createFiles, (req: Request, res: Response) => {

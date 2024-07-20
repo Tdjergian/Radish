@@ -62,8 +62,6 @@ export interface MountPoint {
   containerPath: string;
 }
 
-
-
 // Example dockerCompose object
 
 export interface MemoryData {
@@ -73,4 +71,9 @@ export interface MemoryData {
 
 export interface CPUData {
   usedCPU: number;
+}
+
+export interface User{
+  id: string;
+  username: string;
 }
