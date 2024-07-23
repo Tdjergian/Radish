@@ -1,13 +1,17 @@
-import React from "react";
-import { Outlet } from 'react-router-dom';
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
-import Sidebar from "./components/Sidebar"
+import Sidebar from "./components/Sidebar";
 import "../public/style.css";
 
 function App() {
-  return(
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  const toggleColorMode = () => {
+    setMode((prevMode) => (prevMode === "dark" ? "light" : "dark"));
+  };
+  return (
     <div>
-      <Header />
+      <Header mode={mode} toggleColorMode={toggleColorMode} />
       <div className="flex flex-1">
         <Sidebar />
         <div className="flex flex-1">

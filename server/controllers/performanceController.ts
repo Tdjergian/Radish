@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 const { createClient } = require("redis");
+const Redis = require("ioredis");
+
 require("dotenv").config();
 interface RedisRequestBody {
   host: string;
@@ -8,6 +10,42 @@ interface RedisRequestBody {
 }
 
 const performanceController: { [key: string]: any } = {};
+//connect to AWS cluster
+const cluster = new Redis.Cluster([
+  { host: "52.32.221.157", port: 6379 },
+  { host: "54.70.94.134", port: 6379 },
+  { host: "34.221.141.10", port: 6379 },
+  { host: "54.245.151.142", port: 6379 },
+]);
+
+cluster.on("connect", () => {
+  console.log("AWS cluster connected");
+});
+
+cluster.on("error", (err: Error) => {
+  console.error("AWS cluster connection error", err);
+});
+
+performanceController.connectAWSCluster = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await cluster.set("key", "value");
+    console.log("set result from AWS connection", result);
+    return next();
+  } catch (err) {
+    return next({
+      log: `redisController.connectUserRedis error ${err}`,
+      message: `could not connect to Redis instance`,
+      status: 500,
+    });
+  }
+};
+
+//connect to Redis cloud
+
 performanceController.connectUserRedis = async (
   req: Request,
   res: Response,
@@ -57,7 +95,9 @@ performanceController.getMemory = async (
   next: NextFunction
 ) => {
   try {
-    const redisClient = res.locals.redisClient;
+    //const redisClient = res.locals.redisClient;
+    //switch back to above if use redis cloud
+    const redisClient = cluster;
     if (!redisClient) {
       throw new Error("Redis client is not available");
     }
@@ -98,7 +138,8 @@ performanceController.getUsedCPU = async (
   next: NextFunction
 ) => {
   try {
-    const redisClient = res.locals.redisClient;
+    //const redisClient = res.locals.redisClient;
+    const redisClient = cluster;
     if (!redisClient) {
       throw new Error("Redis client is not available");
     }

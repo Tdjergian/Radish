@@ -90,26 +90,27 @@ app.post("/api/createFiles", createFiles, (req: Request, res: Response) => {
 });
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
-app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
-    res.status(200).json(res.locals.pricingTermsArray);
-}); 
-
-app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
-    res.status(200).send('Task definition created successfully');
+app.post("/getPricing", getEC2Pricing, (req: Request, res: Response) => {
+  res.status(200).json(res.locals.pricingTermsArray);
 });
 
-app.post("/api/memory", connectUserRedis, getMemory, (req, res) => {
+app.post("/api/createTaskDefinition", (req: Request, res: Response) => {
+  res.status(200).send("Task definition created successfully");
+});
+
+app.post("/api/memory", getMemory, (req, res) => {
   //res.status(200).send("connect to redis");
   console.log("backend", res.locals.memory);
   res.status(200).json(res.locals.memory);
 });
+//add connectUserRedis if connect to redis cloud
 
-app.post("/api/cpu", connectUserRedis, getUsedCPU, (req, res) => {
+app.post("/api/cpu", getUsedCPU, (req, res) => {
   //res.status(200).send("connect to redis");
   console.log("back end", res.locals.getUsedCPU);
   res.status(200).json(res.locals.getUsedCPU);
 });
-
+//add connectUserRedis if connect to redis cloud
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
