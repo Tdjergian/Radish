@@ -31,13 +31,6 @@ root.render(
           <Route path="/pricing" element={<PricingForm />} />
           <Route path="/performance" element={<Performance />} />
         </Route>
-        {/* <Route path="/" element={<App />}>
-          <Route index element={<Main />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/login' element={<Login />} />
-          <Route path="/pricing" element={<PricingForm />} />
-          <Route path="/performance" element={<Performance />} />
-        </Route> */}
       </Routes>
     </Router>
   </Provider>

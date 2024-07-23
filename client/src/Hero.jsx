@@ -7,11 +7,16 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import {useNavigate} from 'react-router-dom'
 
 export default function Hero() {
   const logoStyle = {
     width: "150px",
     height: "auto",
+  };
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/login");
   };
   return (
     <Box
@@ -99,7 +104,7 @@ export default function Hero() {
                 "aria-label": "Enter your email address",
               }}
             />
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleClick}>
               Start now
             </Button>
           </Stack>
