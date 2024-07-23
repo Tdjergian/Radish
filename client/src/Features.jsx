@@ -143,7 +143,7 @@ export default function Features() {
                 {selectedFeature.description}
               </Typography>
               <Link
-                color="primary"
+                color="text.primary"
                 variant="body2"
                 fontWeight="bold"
                 sx={{
@@ -210,11 +210,11 @@ export default function Features() {
                         if (theme.palette.mode === "light") {
                           return selectedItemIndex === index
                             ? "primary.main"
-                            : "grey.300";
+                            : "black";
                         }
                         return selectedItemIndex === index
                           ? "primary.main"
-                          : "grey.700";
+                          : "black";
                       },
                     }}
                   >
@@ -236,12 +236,13 @@ export default function Features() {
                       {description}
                     </Typography>
                     <Link
-                      color="primary"
+                      color="text.primary"
                       variant="body2"
                       fontWeight="bold"
                       sx={{
                         display: "inline-flex",
                         alignItems: "center",
+
                         "& > svg": { transition: "0.2s" },
                         "&:hover > svg": { transform: "translateX(2px)" },
                       }}
@@ -249,10 +250,11 @@ export default function Features() {
                         event.stopPropagation();
                       }}
                     >
-                      <span>Learn more</span>
+                      <span color="text.primary">Learn more</span>
                       <ChevronRightRoundedIcon
                         fontSize="small"
                         sx={{ mt: "1px", ml: "2px" }}
+                        color="text.primary"
                       />
                     </Link>
                   </Box>

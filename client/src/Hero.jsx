@@ -9,6 +9,10 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 export default function Hero() {
+  const logoStyle = {
+    width: "150px",
+    height: "auto",
+  };
   return (
     <Box
       id="hero"
@@ -36,18 +40,22 @@ export default function Hero() {
             variant="h1"
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", md: "row" },
+              // flexDirection: { xs: "column", md: "row" },
+              flexDirection: { xs: "column", md: "column" },
               alignSelf: "center",
               textAlign: "center",
               fontSize: "clamp(3.5rem, 10vw, 4rem)",
               color: "text.primary",
             }}
           >
-            Redis solutions &nbsp;
+            Redis developer solutions &nbsp;
             <Typography
               component="span"
               variant="h1"
               sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 fontSize: "clamp(3rem, 10vw, 4rem)",
                 color: (theme) =>
                   theme.palette.mode === "light"
@@ -55,6 +63,11 @@ export default function Hero() {
                     : "primary.light",
               }}
             >
+              <img
+                src="/static/images/Radish.png"
+                style={logoStyle}
+                alt="logo of Radish"
+              />
               Radish
             </Typography>
           </Typography>

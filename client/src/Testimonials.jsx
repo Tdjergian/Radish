@@ -111,6 +111,7 @@ export default function Testimonials() {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   pr: 2,
+                  color: "text.primary",
                 }}
               >
                 <CardHeader

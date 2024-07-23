@@ -1,31 +1,24 @@
-import React, { ReactElement } from "react";
-import { FC } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ToggleColorMode from "../src/ToggleColorMode";
 import { Link, useNavigate } from "react-router-dom";
-import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser, resetUser } from "../Redux/slices/userSlice";
-import { RootState, AppDispatch } from "../Redux/store";
 
-//add code for landing page toggle
-interface HeaderProps {
-  mode: "light" | "dark";
-  toggleColorMode: () => void;
-}
-
-const Header: FC<HeaderProps> = ({ mode, toggleColorMode }): ReactElement => {
-  // const Header : FC = (): ReactElement => {
+const Header = ({ mode, toggleColorMode }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+
 
   return (
     <header className="bg-black text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
         <div className="flex items-center">
+          
           <span className="text-xl font-bold">RADISH</span>
         </div>
         <div className="flex space-x-4">
@@ -36,9 +29,9 @@ const Header: FC<HeaderProps> = ({ mode, toggleColorMode }): ReactElement => {
             {user ? (
               <button
                 className="flex items-center justify-center m-2"
-                onClick={() => {
-                  fetch("/api/users/logout");
-                  dispatch(logoutUser());
+                onClick={async () => {
+                  await fetch("/api/users/logout");
+                  await dispatch(logoutUser());
                   dispatch(resetUser());
                   navigate("/");
                 }}
@@ -66,4 +59,5 @@ const Header: FC<HeaderProps> = ({ mode, toggleColorMode }): ReactElement => {
     </header>
   );
 };
+
 export default Header;

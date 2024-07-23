@@ -17,7 +17,7 @@ import Footer from "../src/Footer";
 import Features from "../src/Features";
 import Highlights from "../src/Highlights";
 import Hero from "../src/Hero";
-import Header from "./Header.tsx";
+import Header from "./Header";
 import Testimonials from "../src/Testimonials";
 import getLPTheme from "../src/getLPTheme";
 

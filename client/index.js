@@ -25,7 +25,7 @@ root.render(
         <Route index element={<LandingPage />} />
 
         <Route path="/" element={<App />}>
-          <Route index element={<Main />} />
+          <Route path="/configeration" element={<Main />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pricing" element={<PricingForm />} />
