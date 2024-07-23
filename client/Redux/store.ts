@@ -2,7 +2,9 @@ import { configureStore } from '@reduxjs/toolkit';
 import redisFormSlice from './slices/redisFormSlice';
 import awsSlice from './slices/awsSlice';
 import sliderSlice from './slices/sliderSlice';
+import userSlice from './slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import realClusterDataSlice from './slices/realClusterData';
 
 const store = configureStore(
   {
@@ -10,6 +12,8 @@ const store = configureStore(
       slider: sliderSlice,
       redis: redisFormSlice,
       aws: awsSlice,
+      user: userSlice,
+      realClusterData: realClusterDataSlice
     },
   }
 );

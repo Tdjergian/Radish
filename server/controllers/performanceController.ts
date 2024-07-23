@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 const { createClient } = require("redis");
+const Redis = require("ioredis");
 require("dotenv").config();
 interface RedisRequestBody {
   host: string;
@@ -49,6 +50,8 @@ performanceController.disconnectRedis = async (
       status: 500,
     });
   }
+
+  next();
 };
 
 performanceController.getMemory = async (
