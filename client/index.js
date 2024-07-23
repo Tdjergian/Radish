@@ -11,9 +11,9 @@ import Performance from "./components/Performance.tsx";
 import "../public/style.css";
 import Register from "./components/Register.jsx";
 import Login from "./components/Login.jsx";
-
 import "react-tooltip/dist/react-tooltip.css";
 import LandingPage from "./components/LandingPage.jsx";
+import Slider from "./components/Slider";
 
 const container = document.getElementById("app");
 const root = createRoot(container);
@@ -25,7 +25,7 @@ root.render(
         <Route index element={<LandingPage />} />
 
         <Route path="/" element={<App />}>
-          <Route path="/configeration" element={<Main />} />
+          <Route path="/configuration" element={<Main />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pricing" element={<PricingForm />} />

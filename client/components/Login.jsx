@@ -42,7 +42,7 @@ const Login = () => {
   useEffect(() => {
       if (isSuccess) {
         toast.success('Login successful!');
-        navigate('/');
+        navigate('/configuration');
         dispatch(resetUser());
       }
     }, [isSuccess]);
