@@ -7,10 +7,10 @@ import App from "./App.tsx";
 import Main from "./container/Main";
 import PricingPage from "./Pages/PricingPage.jsx";
 import PricingForm from "./components/PricingForm.jsx";
+import AwsDeployment from "./components/AwsDeployment.jsx";
 import Performance from "./components/Performance.tsx";
 import Register from "./components/Register.jsx"
 import Login from "./components/Login.jsx"
-
 import "react-tooltip/dist/react-tooltip.css";
 import "../public/style.css";
 
@@ -26,6 +26,7 @@ root.render(
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path="/pricing" element={<PricingForm />} />
+          <Route path="/aws" element={<AwsDeployment />} />
           <Route path="/performance" element={<Performance />} />
         </Route>
       </Routes>

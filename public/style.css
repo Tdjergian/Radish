@@ -15,12 +15,15 @@ body {
   color: white;
 }
 :root {
-  --main-color: rgb(104, 117, 217);
-  --main-color-hover: rgb(104, 117, 217, 0.2);
+  --main-color: rgb(127, 179, 59);
+  --main-color-hover: rgb(38, 75, 28);
+  --secondary-color: rgb(221,60,94);
+  --secondary-color-hover: rgb(192,46,42);
   --track-color: #ddd;
   --mark-color: #aaaaaa;
   --shadow: rgb(192, 46, 42);
 }
+
 .main-container {
   margin-left: 50px;
   background-color: var(--bg);
@@ -200,4 +203,25 @@ body {
 
 .tooltip {
   max-width: 400px;
+}
+
+.btn-primary {
+  background-color: var(--main-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--main-color-hover);
+}
+
+.sidebar {
+  background-color: var(--secondary-color)
+}
+
+.section-header {
+  color: var(--main-color);
 }

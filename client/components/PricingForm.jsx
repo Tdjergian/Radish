@@ -91,10 +91,10 @@ const PricingForm = () => {
 
   return (
     <div className="container bg-black text-white p-4">
-      <h2 className="text-center">AWS Pricing for Your Custom Redis Config</h2>
+      <h2 className="text-center text-3xl section-header">AWS Deployment Pricing</h2>
       <div className="dropdown-container mt-4">
         <div className="dropdown-menu">
-          <label htmlFor="options1" className="text-white">Select a region:</label>
+          <label htmlFor="options1" className="text-white text-xl">Select a region:</label>
           <select
             id="options1"
             value={region}
@@ -107,8 +107,8 @@ const PricingForm = () => {
             ))}
           </select>
         </div>
-        <div className="dropdown-menu">
-          <label htmlFor="options2" className="text-white">Select a server type:</label>
+        <div className="dropdown-menu mt-4">
+          <label htmlFor="options2" className="text-white text-xl">Select a server type:</label>
           <select
             id="options2"
             value={serverType}
@@ -121,8 +121,8 @@ const PricingForm = () => {
             ))}
           </select>
         </div>
-        <div className="dropdown-menu redis-form-input">
-          <label htmlFor="options3" className="text-white">Select an operating system:</label>
+        <div className="dropdown-menu redis-form-input mt-4">
+          <label htmlFor="options3" className="text-white text-xl">Select an operating system:</label>
           <select
             id="options3"
             value={operatingSystem}
@@ -137,7 +137,7 @@ const PricingForm = () => {
         </div>
         <button
           onClick={handleSubmit}
-          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="btn-primary mt-4 text-xl"
         >
           Submit
         </button>

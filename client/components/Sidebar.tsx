@@ -4,11 +4,11 @@ import { FaDocker } from "react-icons/fa";
 import { GiDiamondTrophy } from "react-icons/gi";
 import { MdOutlineMonitorHeart } from "react-icons/md";
 import { GrDocumentConfig } from "react-icons/gr";
-import { IoIosMenu } from "react-icons/io";
+import { IoIosCloud } from "react-icons/io";
 
 const Sidebar: FC = (): ReactElement => {
   return (
-    <nav className="bg-gray-800 text-white w-64 min-h-screen">
+    <nav className="bg-main-hover text-white w-64 min-h-screen flex flex-col px-4">
       <div className="px-4 py-6">
         <ul className="space-y-4">
           <li>
@@ -32,6 +32,14 @@ const Sidebar: FC = (): ReactElement => {
           </li>
           <li>
             <div className="flex items-center">
+              <IoIosCloud className="text-gray-300" />
+              <Link to="/aws" className="text-gray-300 hover:text-white ml-2">
+                AWS Deployment
+              </Link>
+            </div>
+          </li>
+          <li>
+            <div className="flex items-center">
               <MdOutlineMonitorHeart className="text-gray-300" />
               <Link
                 to="/performance"
@@ -39,14 +47,6 @@ const Sidebar: FC = (): ReactElement => {
               >
                 Performance
               </Link>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <FaDocker className="text-gray-300  " />
-              <a href="#" className="text-gray-300 hover:text-white ml-2">
-                Docker
-              </a>
             </div>
           </li>
         </ul>
