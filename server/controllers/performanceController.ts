@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 const { createClient } = require("redis");
 const Redis = require("ioredis");
+
 require("dotenv").config();
 interface RedisRequestBody {
   host: string;
@@ -9,11 +10,47 @@ interface RedisRequestBody {
 }
 
 const performanceController: { [key: string]: any } = {};
+//connect to AWS cluster
+const cluster = new Redis.Cluster([
+  { host: "54.71.246.119", port: 6379 },
+  { host: "34.222.89.109", port: 6379 },
+  { host: "54.184.54.158", port: 6379 },
+], {redisOptions: {password: 12345}});
+
+// cluster.on("connect", () => {
+//   console.log("AWS cluster connected");
+// });
+
+cluster.on("error", (err: Error) => {
+  console.error("AWS cluster connection error", err);
+});
+
+performanceController.connectAWSCluster = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await cluster.set("key", "value");
+    console.log("set result from AWS connection", result);
+    return next();
+  } catch (err) {
+    return next({
+      log: `redisController.connectUserRedis error ${err}`,
+      message: `could not connect to Redis instance`,
+      status: 500,
+    });
+  }
+};
+
+//connect to Redis cloud
+
 performanceController.connectUserRedis = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  console.log('in the connectUserRedis function')
   try {
     let { host, port, redisPassword } = req.body;
     host = host || process.env.HOST;
@@ -41,6 +78,7 @@ performanceController.disconnectRedis = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('in the disconnectRedis function')
   try {
     await res.locals.redisClient.disconnect();
   } catch (err) {
@@ -59,12 +97,17 @@ performanceController.getMemory = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('in the getMemory function')
   try {
-    const redisClient = res.locals.redisClient;
+    //const redisClient = res.locals.redisClient;
+    //switch back to above if use redis cloud
+    const redisClient = cluster;
+    console.log('redisClient', redisClient)
     if (!redisClient) {
       throw new Error("Redis client is not available");
     }
     const stats = await redisClient.info("memory");
+    console.log('stats', stats)
     const metrics: string[] = stats.split("\r\n");
     let usedMemory = metrics.find((str) => str.startsWith("used_memory_human"));
     let peakUsedMemory = metrics.find((str) =>
@@ -100,8 +143,10 @@ performanceController.getUsedCPU = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('in the getUsedCPU function')
   try {
-    const redisClient = res.locals.redisClient;
+    //const redisClient = res.locals.redisClient;
+    const redisClient = cluster;
     if (!redisClient) {
       throw new Error("Redis client is not available");
     }

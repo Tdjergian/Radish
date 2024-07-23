@@ -84,3 +84,8 @@ export interface MemoryData {
 export interface CPUData {
   usedCPU: number;
 }
+
+export interface User{
+  id: string;
+  username: string;
+}
