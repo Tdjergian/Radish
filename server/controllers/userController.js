@@ -30,7 +30,8 @@ const registerUser = async (req, res) => {
     const user = await User.create({firstName, lastName, email, password: hashedPassword});
 
     if (user) {
-      res.status(201).cookie('authToken', generateToken(user._id), { httpOnly: true });
+      res.cookie('authToken', generateToken(user._id), { httpOnly: true });
+      return res.status(201).json({ token: generateToken(user._id) });
     } else {
       res.status(400).json({ error: 'Invalid user data'})
     }
