@@ -13,14 +13,14 @@ const performanceController: { [key: string]: any } = {};
 //connect to AWS cluster
 const cluster = new Redis.Cluster([
 
-  { host: "54.71.246.119", port: 6379 },
-  { host: "34.222.89.109", port: 6379 },
-  { host: "54.184.54.158", port: 6379 },
+  { host: "34.219.192.177", port: 6379 },
+  { host: "54.244.103.234", port: 6379 },
+  { host: "54.190.149.145", port: 6379 },
 ], {redisOptions: {password: 12345}});
 
-// cluster.on("connect", () => {
-//   console.log("AWS cluster connected");
-// });
+cluster.on("connect", () => {
+  console.log("AWS cluster connected");
+});
 
 
 cluster.on("error", (err: Error) => {

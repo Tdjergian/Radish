@@ -31,18 +31,6 @@ const connectDB = async () => {
 
 connectDB();
 
-// connect to MongoDB cluster
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(`${process.env.MONGO_URI}`);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
-  }
-}
-
-connectDB();
 
 const app = express();
 const port = 8080;

@@ -27,7 +27,7 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
  
   const securityGroupParams: {Description: string; GroupName: string; VpcId: String} = {
     Description: 'Security group for Redis Cluster',
-    GroupName: 'RedisClusterSecurityGroup-test1',
+    GroupName: 'RedisClusterSecurityGroup-test2',
     VpcId: vpcID
   };
 
