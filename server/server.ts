@@ -14,6 +14,9 @@ const {
   getUsedCPU,
   disconnectRedis,
 } = require("./controllers/performanceController");
+// const { createSecurityGroupScript } = require("./controllers/bashScriptController");
+// const { createSecurityGroupDefinition } = require("./controllers/jsonDefinitionController");
+const { createSecurityGroup, launchEC2s, testIPRequest } = require("./controllers/awsSDKController");
 
 // connect to MongoDB cluster
 const connectDB = async () => {
@@ -27,6 +30,7 @@ const connectDB = async () => {
 }
 
 connectDB();
+
 
 const app = express();
 const port = 8080;
@@ -90,25 +94,45 @@ app.post("/api/createFiles", createFiles, (req: Request, res: Response) => {
 });
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
-app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
-    res.status(200).json(res.locals.pricingTermsArray);
-}); 
-
-app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
-    res.status(200).send('Task definition created successfully');
+app.post("/getPricing", getEC2Pricing, (req: Request, res: Response) => {
+  res.status(200).json(res.locals.pricingTermsArray);
 });
 
-app.post("/api/memory", connectUserRedis, getMemory, (req, res) => {
+app.post("/api/createTaskDefinition", (req: Request, res: Response) => {
+  res.status(200).send("Task definition created successfully");
+});
+
+
+app.post("/api/memory", /*connectUserRedis,*/ getMemory, /*disconnectRedis,*/ (req, res) => {
+
   //res.status(200).send("connect to redis");
   console.log("backend", res.locals.memory);
   res.status(200).json(res.locals.memory);
 });
+//add connectUserRedis if connect to redis cloud
 
-app.post("/api/cpu", connectUserRedis, getUsedCPU, (req, res) => {
+
+app.post("/api/cpu", /*connectUserRedis,*/ getUsedCPU, /*disconnectRedis,*/ (req, res) => {
+
   //res.status(200).send("connect to redis");
   console.log("back end", res.locals.getUsedCPU);
   res.status(200).json(res.locals.getUsedCPU);
 });
+
+
+app.post("/api/testSecurityGroup", createSecurityGroup, (req: Request, res: Response) => {
+    res.status(200).send("Security Group Created");
+});
+
+app.post("/api/testSecurityGroupAndEC2Launch", createSecurityGroup, launchEC2s, (req: Request, res: Response) => {
+    res.status(200).send("Security Group and EC2s Launched");
+});
+
+app.post("/api/testIPAddressRequest", testIPRequest, (req: Request, res: Response) => {
+    res.status(200).send("IP Address Requested");
+});
+
+//add connectUserRedis if connect to redis cloud
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

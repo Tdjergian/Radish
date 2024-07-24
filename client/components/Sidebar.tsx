@@ -14,7 +14,10 @@ const Sidebar: FC = (): ReactElement => {
           <li>
             <div className="flex items-center">
               <GrDocumentConfig className="text-gray-300" />
-              <Link to="/" className="text-gray-300 hover:text-white ml-2">
+              <Link
+                to="/configuration"
+                className="text-gray-300 hover:text-white ml-2"
+              >
                 Configuration
               </Link>
             </div>

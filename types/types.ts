@@ -63,6 +63,17 @@ export interface MountPoint {
 }
 
 
+export interface Ec2Instance {
+  instanceType: string;
+  imageId: string;
+  keyName: string;
+  subnetId: string;
+  securityGroupIds: string[];
+}
+
+export type Ec2ClusterDataState = Record<string, Ec2Instance>;
+
+
 
 // Example dockerCompose object
 
@@ -73,4 +84,9 @@ export interface MemoryData {
 
 export interface CPUData {
   usedCPU: number;
+}
+
+export interface User{
+  id: string;
+  username: string;
 }

@@ -1,11 +1,12 @@
-import React, { useRef, useEffect, ReactElement } from "react";
+import React, { useRef, useEffect, ReactElement, useState } from "react";
 import * as d3 from "d3";
 import { SimulationNodeDatum, D3DragEvent  } from "d3";
 import { useSelector } from "react-redux";
 import master_logo from "../asset/redis_logo.svg";
 import replica_logo from "../asset/replica_logo.svg";
 import client_logo from "../asset/client_logo.svg";
-import { useAppSelector } from "../Redux/store";
+import { useAppSelector, useAppDispatch } from "../Redux/store";
+import { Diversity1 } from "@mui/icons-material";
 
 interface replicaObj extends SimulationNodeDatum{
   id: string,
@@ -38,11 +39,13 @@ interface test {
 
 
 
-const Visual: React.FC = (): ReactElement => {
+const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boolean}): ReactElement => {
   const svgRef = useRef();
+  const dispatch = useAppDispatch();
   const sentinel: number = useAppSelector((state) => state.slider.sentinelsValue);
   const shard: number = useAppSelector((state) => state.slider.shardsValue);
   const replica: number = useAppSelector((state) => state.slider.replicasValue);
+  
 
   useEffect(() => {
     const width: number = 800;
@@ -165,7 +168,8 @@ const Visual: React.FC = (): ReactElement => {
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended)
-      );
+      )
+      .on("click", (event, d) => {console.log('clicked', d)});
 
     simulation.on("tick", () => {
       link
@@ -196,7 +200,12 @@ const Visual: React.FC = (): ReactElement => {
     };
   }, [shard, replica]);
 
-  return <svg ref={svgRef}></svg>;
+  return (
+    <div>
+
+      <svg ref={svgRef} style={{position: 'sticky'}}></svg> 
+    </div>
+  ) ;
 };
 
 export default Visual;

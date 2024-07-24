@@ -36,7 +36,7 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success('Registration & login successful!');
-      navigate('/');
+      navigate('/configuration');
       dispatch(resetUser());
     }
   }, [isSuccess]);
