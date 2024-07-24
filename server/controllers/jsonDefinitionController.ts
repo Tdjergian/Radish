@@ -66,7 +66,7 @@ jsonDefinitionController.createSecurityGroupDefinition = (req: Request, res: Res
         ToPort: 6379,
         IpRanges: [
           {
-            CidrIp: '0.0.0.0/16'
+            CidrIp: '0.0.0.0/0'
           },
         ],
       },
@@ -76,21 +76,21 @@ jsonDefinitionController.createSecurityGroupDefinition = (req: Request, res: Res
         ToPort: 16379,
         IpRanges: [
           {
-            CidrIp: '0.0.0.0/16'
+            CidrIp: '0.0.0.0/0'
           }
         ]
-      }
-    ], 
-    Egress: [
+      }, 
       {
         IpProtocol: 'tcp',
+        FromPort: 22,
+        ToPort: 22,
         IpRanges: [
           {
             CidrIp: '0.0.0.0/0'
           }
-        ]
+        ], 
       }
-    ]
+    ],
   }
   
   fs.writeFile(`${outputDir}/securityGroupDefinition.json`, JSON.stringify(SecurityGroupDefinition, null, 2), (err: Error) => {
