@@ -62,6 +62,7 @@ export interface MountPoint {
   containerPath: string;
 }
 
+
 export interface Ec2Instance {
   instanceType: string;
   imageId: string;

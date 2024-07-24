@@ -13,7 +13,9 @@ const store = configureStore(
       redis: redisFormSlice,
       aws: awsSlice,
       user: userSlice,
+
       realClusterData: realClusterDataSlice
+
     },
   }
 );

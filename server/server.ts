@@ -31,6 +31,19 @@ const connectDB = async () => {
 
 connectDB();
 
+// connect to MongoDB cluster
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(`${process.env.MONGO_URI}`);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+connectDB();
+
 const app = express();
 const port = 8080;
 
@@ -101,18 +114,23 @@ app.post("/api/createTaskDefinition", (req: Request, res: Response) => {
   res.status(200).send("Task definition created successfully");
 });
 
+
 app.post("/api/memory", /*connectUserRedis,*/ getMemory, /*disconnectRedis,*/ (req, res) => {
+
   //res.status(200).send("connect to redis");
   console.log("backend", res.locals.memory);
   res.status(200).json(res.locals.memory);
 });
 //add connectUserRedis if connect to redis cloud
 
+
 app.post("/api/cpu", /*connectUserRedis,*/ getUsedCPU, /*disconnectRedis,*/ (req, res) => {
+
   //res.status(200).send("connect to redis");
   console.log("back end", res.locals.getUsedCPU);
   res.status(200).json(res.locals.getUsedCPU);
 });
+
 
 app.post("/api/testSecurityGroup", createSecurityGroup, (req: Request, res: Response) => {
     res.status(200).send("Security Group Created");
@@ -126,6 +144,7 @@ app.post("/api/testIPAddressRequest", testIPRequest, (req: Request, res: Respons
     res.status(200).send("IP Address Requested");
 });
 
+//add connectUserRedis if connect to redis cloud
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
