@@ -26,13 +26,13 @@ const DeployModal: FC = ():ReactElement => {
             <div>
               <label className='text-black'>Name your cluster</label>
               <input type='text' className='border border-gray-300 rounded w-full p-2' />
-              <label htmlFor="">AMI Public Key</label>
+              <label className="text-black">AMI Public Key</label>
               <input type='text' className='border border-gray-300 rounded w-full p-2' />
-              <label htmlFor="">AMI Secret Key</label>
+              <label className="text-black">AMI Secret Key</label>
               <input type='text' className='border border-gray-300 rounded w-full p-2' />
-              <label htmlFor="">VPC ID</label>
+              <label className="text-black">VPC ID</label>
               <input type='text' className='border border-gray-300 rounded w-full p-2' />
-              <label htmlFor="">Subnet ID</label>
+              <label className="text-black">Subnet ID</label>
               <input type='text' className='border border-gray-300 rounded w-full p-2' />
             </div>
             <footer>
