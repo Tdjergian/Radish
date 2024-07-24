@@ -14,6 +14,10 @@ import Login from "./components/Login.jsx"
 
 import "react-tooltip/dist/react-tooltip.css";
 import "../public/style.css";
+
+import Register from "./components/Register.jsx";
+import Login from "./components/Login.jsx";
+
 import "react-tooltip/dist/react-tooltip.css";
 import LandingPage from "./components/LandingPage.jsx";
 import Slider from "./components/Slider";

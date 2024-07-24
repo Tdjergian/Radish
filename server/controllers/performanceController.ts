@@ -12,6 +12,7 @@ interface RedisRequestBody {
 const performanceController: { [key: string]: any } = {};
 //connect to AWS cluster
 const cluster = new Redis.Cluster([
+
   { host: "54.71.246.119", port: 6379 },
   { host: "34.222.89.109", port: 6379 },
   { host: "54.184.54.158", port: 6379 },
@@ -20,6 +21,7 @@ const cluster = new Redis.Cluster([
 // cluster.on("connect", () => {
 //   console.log("AWS cluster connected");
 // });
+
 
 cluster.on("error", (err: Error) => {
   console.error("AWS cluster connection error", err);
@@ -102,7 +104,9 @@ performanceController.getMemory = async (
     //const redisClient = res.locals.redisClient;
     //switch back to above if use redis cloud
     const redisClient = cluster;
+
     console.log('redisClient', redisClient)
+
     if (!redisClient) {
       throw new Error("Redis client is not available");
     }
