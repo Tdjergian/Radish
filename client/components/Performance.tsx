@@ -95,7 +95,9 @@ const Performance: FC = (): ReactElement => {
   return (
     <div className="bg-black text-white p-4">
       <div className="text-center">
-        <h1 className="text-3xl font-bold mb-4 section-header">Redis Memory and CPU Usage</h1>
+        <h1 className="text-3xl font-bold mb-4 section-header">
+          Redis Memory and CPU Usage
+        </h1>
       </div>
       <div className="content">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -120,7 +122,9 @@ const Performance: FC = (): ReactElement => {
       {BenchmarkData.BenchmarkResult && (
         <div>
           <p>Benchmark results for 5 clients and 10 requests:</p>
-          <pre>{BenchmarkData.BenchmarkResult}</pre>
+          <div style={{ maxWidth: 500 }}>
+            <pre>{BenchmarkData.BenchmarkResult}</pre>
+          </div>
         </div>
       )}
       {!loading && !BenchmarkData && (
