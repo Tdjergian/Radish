@@ -158,6 +158,13 @@ app.post(
   }
 );
 
+app.post("/api/testRequestBody", (req: Request, res: Response) => {console.log(req.body); res.status(200).send("Request Body Received")});
+
+app.get('/api/benchmark', runBenchmark, (req, res) => {
+    console.log('running benchmark');
+    // res.status(200).json(res.locals.benchmarkData);
+  });
+
 //add connectUserRedis if connect to redis cloud
 
 app.listen(port, () => {
