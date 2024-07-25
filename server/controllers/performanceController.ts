@@ -13,9 +13,9 @@ const performanceController: { [key: string]: any } = {};
 //connect to AWS cluster
 const cluster = new Redis.Cluster(
   [
-    { host: "34.219.192.177", port: 6379 },
-    { host: "54.244.103.234", port: 6379 },
-    { host: "54.190.149.145", port: 6379 },
+    { host: "35.92.138.72", port: 6379 },
+    { host: "54.245.154.133", port: 6379 },
+    { host: "18.246.149.105", port: 6379 },
   ],
   { redisOptions: { password: 12345 } }
 );
@@ -170,6 +170,5 @@ performanceController.getUsedCPU = async (
     });
   }
 };
-
 
 module.exports = performanceController;
