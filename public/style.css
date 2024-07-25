@@ -4,20 +4,20 @@
 
 * {
   font-family: 'Roboto', sans-serif;
-  color: white;
+  /* color: white; */
   font-weight: 400;
   margin: 0;
   padding: 0;
 }
 
 body {
-  /* background-color: black; */
+  background-color: black;
   color: white;
 }
 :root {
-  --main-color: rgb(127, 179, 59);
-  --main-color-hover: rgb(38, 75, 28);
-  --secondary-color: rgb(221,60,94);
+  --main-color: rgb(9, 89, 170);
+  --main-color-hover: rgb(2, 41, 79);
+  --secondary-color: rgb(206,229, 253);
   --secondary-color-hover: rgb(192,46,42);
   --track-color: #ddd;
   --mark-color: #aaaaaa;
@@ -224,4 +224,8 @@ body {
 
 .section-header {
   color: var(--main-color);
+}
+
+.visualizer-background {
+  background-color: rgb(229, 231, 233);
 }

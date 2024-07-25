@@ -5,8 +5,8 @@ module.exports = {
     extend: {
       colors: {
         main: {
-          DEFAULT: 'rgb(127, 179, 59)',
-          hover: 'rgb(38, 75, 28)',
+          DEFAULT: 'rgb(9, 89, 170)',
+          hover: 'rgb(2, 41, 79)',
         },
         secondary: {
           DEFAULT: 'rgb(221, 60, 94)',
