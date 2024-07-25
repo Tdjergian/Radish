@@ -7,7 +7,7 @@ services:
       - '80:80'
     environment:
       - REDIS_HOST=Redis-0-0
-      - REDIS_PORT=
+      - REDIS_PORT=6379
       - REDIS_PASSWORD=undefined
       - USE_REDIS=true
     command:
@@ -24,7 +24,7 @@ services:
       - redis-0-0-data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - '0:0'
+      - '6379:6379'
     networks:
       redis-cluster:
         ipv4_address: 172.20.0.10
@@ -36,7 +36,7 @@ services:
       - redis-0-1-data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - '1:0'
+      - '6380:6379'
     networks:
       redis-cluster:
         ipv4_address: 172.20.0.11
@@ -48,7 +48,7 @@ services:
       - redis-0-2-data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - '2:0'
+      - '6381:6379'
     networks:
       redis-cluster:
         ipv4_address: 172.20.0.12
@@ -60,7 +60,7 @@ services:
       - redis-1-0-data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - '3:3'
+      - '6382:6382'
     networks:
       redis-cluster:
         ipv4_address: 172.20.0.20
@@ -72,7 +72,7 @@ services:
       - redis-1-1-data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - '4:3'
+      - '6383:6382'
     networks:
       redis-cluster:
         ipv4_address: 172.20.0.21
@@ -84,7 +84,7 @@ services:
       - redis-1-2-data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - '5:3'
+      - '6384:6382'
     networks:
       redis-cluster:
         ipv4_address: 172.20.0.22

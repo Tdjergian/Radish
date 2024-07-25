@@ -1,60 +1,49 @@
-import React, { useState, ReactElement, FC } from "react";
-import { Link } from "react-router-dom";
+import React, { ReactElement, FC } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FaDocker } from "react-icons/fa";
 import { GiDiamondTrophy } from "react-icons/gi";
 import { MdOutlineMonitorHeart } from "react-icons/md";
 import { GrDocumentConfig } from "react-icons/gr";
-import { IoIosMenu } from "react-icons/io";
+import { IoIosCloud } from "react-icons/io";
 
 const Sidebar: FC = (): ReactElement => {
+  const location = useLocation();
+
+  const navigation = [
+    { name: 'Configuration', href: '/configuration', icon: GrDocumentConfig },
+    { name: 'Pricing', href: '/pricing', icon: GiDiamondTrophy },
+    { name: 'AWS Deployment', href: '/aws', icon: IoIosCloud },
+    { name: 'Performance', href: '/performance', icon: MdOutlineMonitorHeart },
+  ];
+
+  function classNames(...classes: (string | boolean | undefined)[]) {
+    return classes.filter(Boolean).join(' ')
+  }
+
   return (
-    <nav className="bg-gray-800 text-white w-64 min-h-screen">
-      <div className="px-4 py-6">
+    <nav className="bg-main-hover text-white w-64 min-h-screen flex flex-col">
+      <div className="py-6">
         <ul className="space-y-4">
-          <li>
-            <div className="flex items-center">
-              <GrDocumentConfig className="text-gray-300" />
-              <Link
-                to="/configuration"
-                className="text-gray-300 hover:text-white ml-2"
-              >
-                Configuration
-              </Link>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <GiDiamondTrophy className="text-gray-300" />
-              <Link
-                to="/pricing"
-                className="text-gray-300 hover:text-white ml-2"
-              >
-                Pricing
-              </Link>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <MdOutlineMonitorHeart className="text-gray-300" />
-              <Link
-                to="/performance"
-                className="text-gray-300 hover:text-white ml-2"
-              >
-                Performance
-              </Link>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <FaDocker className="text-gray-300  " />
-              <a href="#" className="text-gray-300 hover:text-white ml-2">
-                Docker
-              </a>
-            </div>
-          </li>
+          {navigation.map((item) => (
+            <li key={item.name}>
+              <div className={classNames(location.pathname === item.href ? 'bg-gray-700 flex items-center px-4' : 'flex items-center px-4')}>
+                <item.icon className="text-gray-300" />
+                <Link
+                  to={item.href}
+                  className={classNames(
+                    location.pathname === item.href ? 'text-white' : 'text-gray-300 hover:text-white',
+                    'ml-2 p-2 rounded'
+                  )}
+                >
+                  {item.name}
+                </Link>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </nav>
   );
 };
+
 export default Sidebar;

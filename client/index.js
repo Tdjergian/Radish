@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import store from './Redux/store.ts';
 import App from './App.tsx';
 import Main from './container/Main';
+import AwsDeployment from './components/AwsDeployment.jsx';
 import PricingPage from './Pages/PricingPage.jsx';
 import PricingForm from './components/PricingForm.jsx';
 import Performance from './components/Performance.tsx';
@@ -33,6 +34,7 @@ root.render(
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pricing" element={<PricingForm />} />
+          <Route path="/aws" element={<AwsDeployment />} />
           <Route path="/performance" element={<Performance />} />
         </Route>
       </Routes>
