@@ -201,8 +201,7 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
   }, [shard, replica]);
 
   return (
-    <div>
-
+    <div className="visualizer-background">
       <svg ref={svgRef} style={{position: 'sticky'}}></svg> 
     </div>
   ) ;

@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser, resetUser } from "../Redux/slices/userSlice";
+import RadishLogo from "../asset/RadishLogo2-3.png";
 
 const Header = ({ mode, toggleColorMode }) => {
   const navigate = useNavigate();
@@ -18,8 +19,12 @@ const Header = ({ mode, toggleColorMode }) => {
     <header className="bg-black text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
         <div className="flex items-center">
-          
-          <span className="text-xl font-bold">RADISH</span>
+          <img src={RadishLogo} alt="Radish Logo" className="h-8 w-auto" />
+          <div className="flex items-center">
+            <Link to="/" className="text-xl font-bold">
+              RADISH
+            </Link>
+          </div>
         </div>
         <div className="flex space-x-4">
           <div className="text-center m-2">

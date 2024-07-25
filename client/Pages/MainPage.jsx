@@ -5,7 +5,6 @@ import "../../public/style.css";
 function MainPage() {
   return (
     <div>
-      <h1>radish is running</h1>
       <Slider />
     </div>
   );
