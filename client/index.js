@@ -19,6 +19,7 @@ import LandingPage from './components/LandingPage.jsx';
 import Slider from './components/Slider';
 
 const container = document.getElementById('app');
+
 const root = createRoot(container);
 
 root.render(

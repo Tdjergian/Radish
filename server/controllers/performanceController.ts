@@ -12,6 +12,7 @@ interface RedisRequestBody {
 
 const performanceController: { [key: string]: any } = {};
 //connect to AWS cluster
+
 const cluster = new Redis.Cluster(
   [
     { host: '34.219.192.177', port: 6379 },
@@ -21,9 +22,10 @@ const cluster = new Redis.Cluster(
   { redisOptions: { password: 12345 } }
 );
 
-// cluster.on("connect", () => {
-//   console.log("AWS cluster connected");
-// });
+
+cluster.on("connect", () => {
+  console.log("AWS cluster connected");
+});
 
 cluster.on('error', (err: Error) => {
   console.error('AWS cluster connection error', err);
