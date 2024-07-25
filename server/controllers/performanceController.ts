@@ -11,17 +11,18 @@ interface RedisRequestBody {
 
 const performanceController: { [key: string]: any } = {};
 //connect to AWS cluster
-const cluster = new Redis.Cluster([
-
-  { host: "34.219.192.177", port: 6379 },
-  { host: "54.244.103.234", port: 6379 },
-  { host: "54.190.149.145", port: 6379 },
-], {redisOptions: {password: 12345}});
+const cluster = new Redis.Cluster(
+  [
+    { host: "34.219.192.177", port: 6379 },
+    { host: "54.244.103.234", port: 6379 },
+    { host: "54.190.149.145", port: 6379 },
+  ],
+  { redisOptions: { password: 12345 } }
+);
 
 cluster.on("connect", () => {
   console.log("AWS cluster connected");
 });
-
 
 cluster.on("error", (err: Error) => {
   console.error("AWS cluster connection error", err);
@@ -52,7 +53,7 @@ performanceController.connectUserRedis = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('in the connectUserRedis function')
+  console.log("in the connectUserRedis function");
   try {
     let { host, port, redisPassword } = req.body;
     host = host || process.env.HOST;
@@ -80,7 +81,7 @@ performanceController.disconnectRedis = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('in the disconnectRedis function')
+  console.log("in the disconnectRedis function");
   try {
     await res.locals.redisClient.disconnect();
   } catch (err) {
@@ -99,19 +100,19 @@ performanceController.getMemory = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('in the getMemory function')
+  console.log("in the getMemory function");
   try {
     //const redisClient = res.locals.redisClient;
     //switch back to above if use redis cloud
     const redisClient = cluster;
 
-    console.log('redisClient', redisClient)
+    console.log("redisClient", redisClient);
 
     if (!redisClient) {
       throw new Error("Redis client is not available");
     }
     const stats = await redisClient.info("memory");
-    console.log('stats', stats)
+    console.log("stats", stats);
     const metrics: string[] = stats.split("\r\n");
     let usedMemory = metrics.find((str) => str.startsWith("used_memory_human"));
     let peakUsedMemory = metrics.find((str) =>
@@ -147,7 +148,7 @@ performanceController.getUsedCPU = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('in the getUsedCPU function')
+  console.log("in the getUsedCPU function");
   try {
     //const redisClient = res.locals.redisClient;
     const redisClient = cluster;
@@ -169,5 +170,6 @@ performanceController.getUsedCPU = async (
     });
   }
 };
+
 
 module.exports = performanceController;

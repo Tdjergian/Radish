@@ -283,7 +283,10 @@ export default function Features() {
                 m: "auto",
                 width: 420,
                 height: 500,
+
                 backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
                 backgroundImage: (theme) =>
                   theme.palette.mode === "light"
                     ? items[selectedItemIndex].imageLight
