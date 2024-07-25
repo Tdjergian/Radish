@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setRegion, setServerType, setOperatingSystem, setPricingData, setLoading, setError } from '../Redux/slices/awsSlice';
-import DeployModal from './DeployModal';
 
 const regions = [
   'US East (N. Virginia)',
@@ -37,14 +37,13 @@ const operatingSystems = [
 const PricingForm = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const serverType = useSelector((state) => state.aws.serverType);
   const region = useSelector((state) => state.aws.region);
   const operatingSystem = useSelector((state) => state.aws.operatingSystem);
   const error = useSelector((state) => state.aws.error); 
   const shardsValue = useSelector(state => state.slider.shardsValue);
   const replicasValue = useSelector(state => state.slider.replicasValue);
-
-  const [modalShow, setModalShow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,6 +72,7 @@ const PricingForm = () => {
       const data = await response.json();
       console.log(data);
       dispatch(setPricingData(data));
+      navigate('/pricing-display'); // Navigate to the PricingDisplay component
     } catch (error) {
       dispatch(setError('There was an error fetching the pricing data.'));
     } finally {
@@ -91,10 +91,6 @@ const PricingForm = () => {
   const handleOperatingSystemChange = (e) => {
     dispatch(setOperatingSystem(e.target.value));
   };
-
-
-
-
 
   return (
     <div className="container bg-black text-white p-4">
@@ -150,8 +146,6 @@ const PricingForm = () => {
         </button>
         {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>
-      <DeployModal />
-    
     </div>
   );
 };

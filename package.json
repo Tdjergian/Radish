@@ -7,7 +7,7 @@
     "build": "webpack",
     "start": "nodemon server/server.js",
     "dev": "webpack serve & nodemon --exec ts-node ./server/server.ts",
-    "backend": "nodemon --exec ts-node ./server/server.ts"
+    "backend": "nodemon server/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,7 +24,10 @@
     "aws-sdk": "^2.1642.0",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
+
     "boostrap": "^2.0.0",
+    "bcryptjs": "^2.4.3",
+
     "browser-router": "^0.2.0",
     "chart.js": "^4.4.3",
     "cookie-parser": "^1.4.6",

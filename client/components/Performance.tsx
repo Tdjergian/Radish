@@ -1,6 +1,6 @@
-import React, { useEffect, useState, ReactElement, FC } from 'react';
-import axios from 'axios';
-import { Line } from 'react-chartjs-2';
+import React, { useEffect, useState, ReactElement, FC } from "react";
+import axios from "axios";
+import { Line } from "react-chartjs-2";
 import {
   Box,
   Card,
@@ -8,9 +8,11 @@ import {
   Typography,
   Container,
   Grid,
-} from '@mui/material';
-import { MemoryData, CPUData, BenchmarkData } from '../../types/types';
-import { cpuUsage } from 'process';
+} from "@mui/material";
+import { MemoryData, CPUData } from "../../types/types";
+import { cpuUsage } from "process";
+
+
 
 const Performance: FC = (): ReactElement => {
   const [memoryData, setMemoryData] = useState<MemoryData>({
@@ -18,18 +20,13 @@ const Performance: FC = (): ReactElement => {
     peakUsedMemory: 0,
   });
   const [CPUData, setCPUData] = useState<CPUData>({ usedCPU: 0 });
-  const [BenchmarkData, setBenchmarkData] = useState<BenchmarkData>({
-    BenchmarkResult: null,
-  });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMemoryData = async () => {
       try {
-        const response = await fetch('/api/memory', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/memory", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
         });
         console.log(`response`, response);
         if (!response.ok) {
@@ -44,9 +41,9 @@ const Performance: FC = (): ReactElement => {
 
     const fetchCPUData = async () => {
       try {
-        const response = await fetch('/api/cpu', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/cpu", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
         });
 
         if (!response.ok) {
@@ -63,34 +60,8 @@ const Performance: FC = (): ReactElement => {
     fetchCPUData();
   }, []);
 
-  const runBenchmark = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch('/api/benchmark', {
-        method: 'GET',
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error running benchmark ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        setBenchmarkData({ BenchmarkResult: result.output });
-      } else {
-        setError(`Benchmark failed: ${result.error}`);
-      }
-    } catch (err: any) {
-      setError(`Error running benchmark: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  console.log('Memory State:', JSON.stringify(memoryData));
-  console.log('CPU State:', JSON.stringify(CPUData));
-  console.log('Benchmark:', BenchmarkData);
+  console.log("Memory State:", JSON.stringify(memoryData));
+  console.log("CPU State:", JSON.stringify(CPUData));
 
   return (
     <div className="bg-black text-white p-4">
@@ -110,22 +81,6 @@ const Performance: FC = (): ReactElement => {
           </div>
         </div>
       </div>
-      <button
-        onClick={runBenchmark}
-        disabled={loading}
-        className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Run Benchmark Test
-      </button>
-      {BenchmarkData.BenchmarkResult && (
-        <div>
-          <p>Benchmark results for 5 clients and 10 requests:</p>
-          <pre>{BenchmarkData.BenchmarkResult}</pre>
-        </div>
-      )}
-      {!loading && !BenchmarkData && (
-        <p>No data yet. Click the button to run the benchmark.</p>
-      )}
     </div>
   );
 };

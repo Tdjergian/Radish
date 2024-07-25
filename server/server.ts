@@ -1,11 +1,11 @@
-import { Memory } from '@mui/icons-material';
-import express, { Request, Response } from 'express';
-const bodyParser = require('body-parser');
-const { createClient } = require('redis');
-const { createFiles } = require('./controllers/fileGenerationController');
-const { getEC2Pricing } = require('./controllers/awsPricingController');
-const Redis = require('ioredis');
-const mongoose = require('mongoose');
+import { Memory } from "@mui/icons-material";
+import express, { Request, Response } from "express";
+const bodyParser = require("body-parser");
+const { createClient } = require("redis");
+const { createFiles } = require("./controllers/fileGenerationController");
+const { getEC2Pricing } = require("./controllers/awsPricingController");
+const Redis = require("ioredis");
+const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
 
 const {
@@ -13,15 +13,10 @@ const {
   getMemory,
   getUsedCPU,
   disconnectRedis,
-  runBenchmark,
-} = require('./controllers/performanceController');
+} = require("./controllers/performanceController");
 // const { createSecurityGroupScript } = require("./controllers/bashScriptController");
 // const { createSecurityGroupDefinition } = require("./controllers/jsonDefinitionController");
-const {
-  createSecurityGroup,
-  launchEC2s,
-  testIPRequest,
-} = require('./controllers/awsSDKController');
+const { createSecurityGroup, launchEC2s, testIPRequest } = require("./controllers/awsSDKController");
 
 // connect to MongoDB cluster
 const connectDB = async () => {
@@ -32,7 +27,7 @@ const connectDB = async () => {
     console.error(err);
     process.exit(1);
   }
-};
+}
 
 connectDB();
 
@@ -41,23 +36,23 @@ const app = express();
 const port = 8080;
 
 // Load .env variables
-require('dotenv').config();
+require("dotenv").config();
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-console.log('Connect to Redis?', process.env.USE_REDIS);
-console.log('Redis Password:', process.env.REDIS_PASSWORD);
+console.log("Connect to Redis?", process.env.USE_REDIS);
+console.log("Redis Password:", process.env.REDIS_PASSWORD);
 
 // Connect to redis cluster when the docker-compose file tells us to do so
-if (process.env.USE_REDIS === 'true') {
+if (process.env.USE_REDIS === "true") {
   const redisMaster = createClient({
     url: `redis://:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
   });
 
-  redisMaster.on('error', (err: Error) =>
-    console.error('Redis Master Error:', err)
+  redisMaster.on("error", (err: Error) =>
+    console.error("Redis Master Error:", err)
   );
 
   redisMaster
@@ -68,24 +63,24 @@ if (process.env.USE_REDIS === 'true') {
       )
     )
     .catch((err: Error) =>
-      console.error('Redis Master Connection Error:', err)
+      console.error("Redis Master Connection Error:", err)
     );
 
-  app.get('/', async (req: Request, res: Response) => {
+  app.get("/", async (req: Request, res: Response) => {
     try {
-      let counter = await redisMaster.get('counter');
+      let counter = await redisMaster.get("counter");
       if (!counter) {
-        await redisMaster.set('counter', 1);
+        await redisMaster.set("counter", 1);
         counter = 1;
       } else {
         counter = parseInt(counter) + 1;
-        await redisMaster.set('counter', counter);
+        await redisMaster.set("counter", counter);
       }
       res.send(counter.toString());
-      console.log('counter:', counter);
+      console.log("counter:", counter);
     } catch (error) {
-      console.error('Error:', error);
-      res.status(500).send('Internal Server Error');
+      console.error("Error:", error);
+      res.status(500).send("Internal Server Error");
     }
   });
 }
@@ -94,69 +89,48 @@ app.use(cookieParser());
 app.use('/api/users', require('./routes/userRoutes'));
 
 // POST route to handle form submission and write redis.conf file
-app.post('/api/createFiles', createFiles, (req: Request, res: Response) => {
-  res.status(200).send('Files created successfully');
+app.post("/api/createFiles", createFiles, (req: Request, res: Response) => {
+  res.status(200).send("Files created successfully");
 });
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
-app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
+app.post("/api/getPricing", getEC2Pricing, (req: Request, res: Response) => {
   res.status(200).json(res.locals.pricingTermsArray);
 });
 
-app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
-  res.status(200).send('Task definition created successfully');
+app.post("/api/createTaskDefinition", (req: Request, res: Response) => {
+  res.status(200).send("Task definition created successfully");
 });
 
-app.post(
-  '/api/memory',
-  /*connectUserRedis,*/ getMemory,
-  /*disconnectRedis,*/ (req, res) => {
-    //res.status(200).send("connect to redis");
-    console.log('backend', res.locals.memory);
-    res.status(200).json(res.locals.memory);
-  }
-);
+
+app.post("/api/memory", /*connectUserRedis,*/ getMemory, /*disconnectRedis,*/ (req, res) => {
+
+  //res.status(200).send("connect to redis");
+  console.log("backend", res.locals.memory);
+  res.status(200).json(res.locals.memory);
+});
 //add connectUserRedis if connect to redis cloud
 
-app.post(
-  '/api/cpu',
-  /*connectUserRedis,*/ getUsedCPU,
-  /*disconnectRedis,*/ (req, res) => {
-    //res.status(200).send("connect to redis");
-    console.log('back end', res.locals.getUsedCPU);
-    res.status(200).json(res.locals.getUsedCPU);
-  }
-);
 
-app.get('/api/benchmark', runBenchmark, (req, res) => {
-  console.log('running benchmark');
-  res.status(200);
+app.post("/api/cpu", /*connectUserRedis,*/ getUsedCPU, /*disconnectRedis,*/ (req, res) => {
+
+  //res.status(200).send("connect to redis");
+  console.log("back end", res.locals.getUsedCPU);
+  res.status(200).json(res.locals.getUsedCPU);
 });
 
-app.post(
-  '/api/testSecurityGroup',
-  createSecurityGroup,
-  (req: Request, res: Response) => {
-    res.status(200).send('Security Group Created');
-  }
-);
 
-app.post(
-  '/api/testSecurityGroupAndEC2Launch',
-  createSecurityGroup,
-  launchEC2s,
-  (req: Request, res: Response) => {
-    res.status(200).send('Security Group and EC2s Launched');
-  }
-);
+app.post("/api/testSecurityGroup", createSecurityGroup, (req: Request, res: Response) => {
+    res.status(200).send("Security Group Created");
+});
 
-app.post(
-  '/api/testIPAddressRequest',
-  testIPRequest,
-  (req: Request, res: Response) => {
-    res.status(200).send('IP Address Requested');
-  }
-);
+app.post("/api/testSecurityGroupAndEC2Launch", createSecurityGroup, launchEC2s, (req: Request, res: Response) => {
+    res.status(200).send("Security Group and EC2s Launched");
+});
+
+app.post("/api/testIPAddressRequest", testIPRequest, (req: Request, res: Response) => {
+    res.status(200).send("IP Address Requested");
+});
 
 //add connectUserRedis if connect to redis cloud
 

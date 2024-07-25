@@ -72,6 +72,8 @@ export interface Ec2Instance {
 
 export type Ec2ClusterDataState = Record<string, Ec2Instance>;
 
+
+
 // Example dockerCompose object
 
 export interface MemoryData {
@@ -82,11 +84,8 @@ export interface MemoryData {
 export interface CPUData {
   usedCPU: number;
 }
-export interface BenchmarkData {
-  BenchmarkResult: string;
-}
 
-export interface User {
+export interface User{
   id: string;
   username: string;
 }
