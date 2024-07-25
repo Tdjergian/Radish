@@ -13,6 +13,7 @@ const {
   getMemory,
   getUsedCPU,
   disconnectRedis,
+  runBenchmark
 } = require("./controllers/performanceController");
 // const { createSecurityGroupScript } = require("./controllers/bashScriptController");
 // const { createSecurityGroupDefinition } = require("./controllers/jsonDefinitionController");
@@ -131,6 +132,13 @@ app.post("/api/testSecurityGroupAndEC2Launch", createSecurityGroup, launchEC2s, 
 app.post("/api/testIPAddressRequest", testIPRequest, (req: Request, res: Response) => {
     res.status(200).send("IP Address Requested");
 });
+
+app.post("/api/testRequestBody", (req: Request, res: Response) => {console.log(req.body); res.status(200).send("Request Body Received")});
+
+app.get('/api/benchmark', runBenchmark, (req, res) => {
+    console.log('running benchmark');
+    // res.status(200).json(res.locals.benchmarkData);
+  });
 
 //add connectUserRedis if connect to redis cloud
 

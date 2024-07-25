@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 const { createClient } = require("redis");
 const Redis = require("ioredis");
+import { exec } from "child_process";
+
 
 require("dotenv").config();
 interface RedisRequestBody {
@@ -13,19 +15,20 @@ const performanceController: { [key: string]: any } = {};
 //connect to AWS cluster
 const cluster = new Redis.Cluster([
 
-  { host: "34.219.192.177", port: 6379 },
-  { host: "54.244.103.234", port: 6379 },
-  { host: "54.190.149.145", port: 6379 },
+  { host: "35.92.138.72", port: 6379 },
+  { host: "54.245.154.133", port: 6379 },
+  { host: "18.246.149.105", port: 6379 },
 ], {redisOptions: {password: 12345}});
 
-cluster.on("connect", () => {
-  console.log("AWS cluster connected");
-});
+
+// cluster.on("connect", () => {
+//   console.log("AWS cluster connected");
+// });
 
 
-cluster.on("error", (err: Error) => {
-  console.error("AWS cluster connection error", err);
-});
+// cluster.on("error", (err: Error) => {
+//   console.error("AWS cluster connection error", err);
+// });
 
 performanceController.connectAWSCluster = async (
   req: Request,
@@ -165,6 +168,41 @@ performanceController.getUsedCPU = async (
     return next({
       log: `redisController.getResponseTimes error ${err}`,
       message: `could not get Response Times`,
+      status: 500,
+    });
+  }
+};
+
+performanceController.runBenchmark = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const host = process.env.HOST || 'localhost';
+    const port = process.env.PORT || 6379;
+    const num_clients = 5;
+    const num_requests = 10;
+    const tests = 'set,get';
+    const password = process.env.REDIS_PASSWORD || 12345;
+    console.log('inside benchmark');
+    // const command = `redis-benchmark -h ${host} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
+    //cluster mode
+    const command = `redis-benchmark -h ${host} -h 54.244.103.234 -h 54.190.149.145 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
+    console.log('command: ', command);
+    exec(command, (error, stdout, stderr) => {
+      console.log('inside exec');
+      if (error) {
+        console.error('Error running redis-benchmark:', stderr);
+        return res.status(500).json({ success: false, error: stderr });
+      }
+      console.log('Benchmark result:', stdout);
+      return res.json({ success: true, output: stdout });
+    });
+  } catch (err) {
+    next({
+      log: `redisController.runBenchmark error ${err}`,
+      message: `Could not run Benchmarking`,
       status: 500,
     });
   }
