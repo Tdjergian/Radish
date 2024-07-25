@@ -22,11 +22,9 @@ const cluster = new Redis.Cluster(
   { redisOptions: { password: 12345 } }
 );
 
-
-
-// cluster.on("connect", () => {
-//   console.log("AWS cluster connected");
-// });
+cluster.on('connect', () => {
+  console.log('AWS cluster connected');
+});
 
 cluster.on('error', (err: Error) => {
   console.error('AWS cluster connection error', err);
@@ -192,7 +190,7 @@ performanceController.runBenchmark = async (
     //cluster mode
     // const command = `redis-benchmark -h 54.190.149.145 -h 34.219.192.177 -h 54.244.103.234 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} `;
 
-    const command = `redis-benchmark -h 34.219.192.177 -h 54.244.103.234 -h 54.190.149.145 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
+    const command = `redis-benchmark -h 35.92.138.72 -h 54.245.154.133 -h 18.246.149.105 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
     exec(command, (error, stdout, stderr) => {
       console.log('inside exec');
       if (error) {
