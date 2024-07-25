@@ -11,23 +11,26 @@
 }
 
 body {
-  /* background-color: black; */
+  background-color: black;
   color: white;
 }
 :root {
-  --main-color: rgb(104, 117, 217);
-  --main-color-hover: rgb(104, 117, 217, 0.2);
+  --main-color: rgb(9, 89, 170);
+  --main-color-hover: rgb(2, 41, 79);
+  --secondary-color: rgb(206,229, 253);
+  --secondary-color-hover: rgb(192,46,42);
   --track-color: #ddd;
   --mark-color: #aaaaaa;
   --shadow: rgb(192, 46, 42);
 }
+
 .main-container {
   margin-left: 50px;
   background-color: var(--bg);
 }
 .title {
   text-align: center;
-  background-color: var(--bg);
+  /* background-color: var(--bg); */
   color: white;
   width: 100%;
   padding: 20px 0;
@@ -200,4 +203,29 @@ body {
 
 .tooltip {
   max-width: 400px;
+}
+
+.btn-primary {
+  background-color: var(--main-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--main-color-hover);
+}
+
+.sidebar {
+  background-color: var(--secondary-color)
+}
+
+.section-header {
+  color: var(--main-color);
+}
+
+.visualizer-background {
+  background-color: rgb(229, 231, 233);
 }
