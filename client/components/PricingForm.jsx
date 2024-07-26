@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setRegion, setServerType, setOperatingSystem, setPricingData, setLoading, setError } from '../Redux/slices/awsSlice';
+import DeployModal from './DeployModal';
 
 const regions = [
   'US East (N. Virginia)',
@@ -146,6 +147,7 @@ const PricingForm = () => {
         </button>
         {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>
+      <DeployModal />
     </div>
   );
 };
