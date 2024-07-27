@@ -59,9 +59,9 @@ const Login = () => {
   return (
     <div className='login-registration-page' style={{height: '94vh'}}>
       <div className="flex flex-col justify-center items-center">
-        <div className="login-registration-form w-3/5 border border-transparent rounded-lg pt-4 mt-20 mb-5 p-10">
-          <h2 className="text-center font-bold text-white text-4xl mt-10">Login</h2>
-          <form className="text-xl" onSubmit={handleSubmit}>
+        <div className="login-registration-form w-3/5 border border-transparent rounded-lg pt-4 mb-5 p-10">
+          <form className="text-xl max-w-md" onSubmit={handleSubmit}>
+            <h2 className="text-center font-bold text-white text-4xl mt-10">Login</h2>
             <div className="flex flex-col">
               <label className="block text-white mt-8 mb-1">
                 Email Address:

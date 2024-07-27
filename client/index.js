@@ -6,14 +6,15 @@ import store from './Redux/store.ts';
 import App from './App.tsx';
 import Main from './container/Main';
 import AwsDeployment from './components/AwsDeployment.jsx';
-import PricingPage from './Pages/PricingPage.jsx';
 import PricingForm from './components/PricingForm.jsx';
 import Performance from './components/Performance.tsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
+import { ToastContainer } from 'react-toastify';
 
 import 'react-tooltip/dist/react-tooltip.css';
 import '../public/style.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import 'react-tooltip/dist/react-tooltip.css';
 import LandingPage from './components/LandingPage.jsx';
@@ -26,9 +27,9 @@ const root = createRoot(container);
 root.render(
   <Provider store={store}>
     <Router>
+      <ToastContainer />
       <Routes>
         <Route index element={<LandingPage />} />
-
         <Route path="/" element={<App />}>
           <Route path="/configuration" element={<Main />} />
           <Route path="/register" element={<Register />} />

@@ -4,6 +4,8 @@ import { registerUser, resetUser } from '../Redux/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import '../stylesheets/loginOrRegister.css';
+import Spinner from 'react-spinners';
+
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -45,9 +47,11 @@ const Register = () => {
   return (
     <div className='login-registration-page' style={{height: '94vh'}}>
       <div className="flex flex-col justify-center items-center">
-      <div className="login-registration-form w-3/5 border border-transparent rounded-lg pt-4 mt-20 mb-5 p-10">
+      <div className="login-registration-form w-3/5 border border-transparent rounded-lg pt-4 mb-5 p-10">
+      
+      {loading ? <div className="min-h-[280px]"> <Spinner loading={loading} /> </div> : 
+      <form className="text-xl max-w-md" onSubmit={handleSubmit} method='post' action='submit' id='registerForm'>
       <h2 className="text-center font-bold text-white text-4xl mt-10">Register</h2>
-      <form className="text-xl" onSubmit={handleSubmit} method='post' action='submit' id='registerForm'>
       <div className="flex flex-col">
         <label className="block text-white mt-8 mb-1">
           First Name:
@@ -67,7 +71,7 @@ const Register = () => {
           <input type="password" value={password} placeholder="Enter your password" className="inline-block input-field rounded-md border-0 py-1 px-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-8 flex-grow" onChange={(e) => setPassword(e.target.value)} />
         <button type="submit" className="btn-primary btn-primary:hover block text-white border border-blue-500 bg-opacity-90 rounded-md py-2 ml-auto rounded-full px-8">Register</button>
       </div>
-      </form>
+      </form>}
       </div>
       </div>
     </div>
