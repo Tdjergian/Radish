@@ -25,9 +25,8 @@ const cluster = new Redis.Cluster(
   { redisOptions: { password: 12345 } }
 );
 
-
-cluster.on("connect", () => {
-  console.log("AWS cluster connected");
+cluster.on('connect', () => {
+  console.log('AWS cluster connected');
 });
 
 cluster.on('error', (err: Error) => {

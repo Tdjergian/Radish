@@ -16,19 +16,38 @@ awsSDKController.configureSDK = (req: Request, res: Response, next: NextFunction
 };
 
 awsSDKController.createSecurityGroup = async (req: Request, res: Response, next: NextFunction) => {
-  aws.config.update({ region: 'us-west-2', accessKeyId: process.env.TOM_PUBLIC_KEY, secretAccessKey: process.env.TOM_SECRET_KEY})
 
   const { 
-    vpcID
+    vpcId,
+    region, 
+    amiPublicKey,
+    amiSecretKey
     } = req.body;
+
+  const regionObject: Record<string,string> = {
+    'US East (N. Virginia)': 'us-east-1',
+    'US East (Ohio)': 'us-east-2',
+    'US West (N. California)': 'us-west-1',
+    'US West (Oregon)': 'us-west-2',
+    'Canada (Central)': 'ca-central-1',
+    'Canada West (Calgary)': 'ca-central-2',
+  }
+  const awsRegion = regionObject[region];
+  console.log('awsRegion: ', awsRegion)
+  console.log('amiPublicKey: ', amiPublicKey)
+  console.log('amiSecretKey: ', amiSecretKey)
+
+  aws.config.update({ region: awsRegion, accessKeyId: amiPublicKey, secretAccessKey: amiSecretKey})
+
 
   const ec2 = new aws.EC2();
 
+  console.log('vpcID: ', vpcId)
  
   const securityGroupParams: {Description: string; GroupName: string; VpcId: String} = {
     Description: 'Security group for Redis Cluster',
-    GroupName: 'RedisClusterSecurityGroup-test2',
-    VpcId: vpcID
+    GroupName: 'RedisClusterSecurityGroup10',
+    VpcId: vpcId
   };
 
   try {
@@ -85,14 +104,15 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
 };
 
 awsSDKController.launchEC2s = async (req: Request, res: Response, next: NextFunction) => {
+  console.log('in launch EC2s')
   const {
     subnetID,
     vpcID,
     region,
     instanceType,
     keyPairName,
-    shards,
-    replicas,
+    shardsValue,
+    replicasValue,
     protectedMode,
     portNumber,
     masterAuth,
@@ -108,15 +128,29 @@ awsSDKController.launchEC2s = async (req: Request, res: Response, next: NextFunc
     rdbchecksum,
     replicaServeStaleData,
     maxmemory,
-    maxmemoryPolicy
+    maxmemoryPolicy, 
+    serverType
   } = req.body;
+
+  for(let key in req.body) {
+    if(req.body[key] === true) {
+      req.body[key] = 'yes';
+    }else if(req.body[key] === false) {
+      req.body[key] = 'no';
+    }
+  }
+
+  console.log('req.body: ', req.body)
+  console.log('rdbcompression: ', rdbcompression)
 
   // This is the script for when the instances are launched. downloads redis and starts the server
   const redisStartupScript = `#!/bin/bash
 sudo yum update
 sudo amazon-linux-extras install redis6 -y
-sleep 30
-redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-config-file nodes.conf --requirepass ${requirePass} --daemonize ${daemonize} --loglevel ${loglevel} --timeout ${timeout} --save ${saveSeconds} ${saveChanges} --appendonly ${appendonly} --appendfsync ${appendfsync} --rdbcompression ${rdbcompression} --rdbchecksum ${rdbchecksum} --replica-serve-stale-data ${replicaServeStaleData} --maxmemory ${maxmemory} --maxmemory-policy ${maxmemoryPolicy}`
+sleep 20
+redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-config-file nodes.conf --requirepass ${masterAuth} --daemonize ${daemonize ? "yes" : "no"} --loglevel ${loglevel} --timeout ${timeout} --save ${saveSeconds} ${saveChanges} --appendonly ${appendonly ? "yes" : "no"} --appendfsync ${appendfsync} --rdbcompression ${rdbcompression ? "yes" : "no"} --rdbchecksum ${rdbchecksum ? "yes" : "no"} --maxmemory ${maxmemory} --maxmemory-policy ${maxmemoryPolicy}`
+
+  console.log('redisStartupScript: ', redisStartupScript)
 
   const ec2 = new aws.EC2();
 
@@ -124,25 +158,27 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-con
   const ec2Params = {
 
     ImageId: 'ami-0323ead22d6752894',
-    InstanceType: instanceType,
+    InstanceType: serverType,
     KeyName: keyPairName,
-    MinCount: shards * (replicas+1),
-    MaxCount: shards * (replicas+1),
+    MinCount: shardsValue * (replicasValue+1),
+    MaxCount: shardsValue * (replicasValue+1),
     UserData: Buffer.from(redisStartupScript).toString('base64'),
 
     NetworkInterfaces: [{
       Groups: [res.locals.securityGroupId],
       DeviceIndex: 0,
       AssociatePublicIpAddress: true,
-      SubnetId: subnetID,
+      subnetId: subnetID,
     }]
   };
+  console.log('ec2Params: ', ec2Params)
 
   try {
-
+    console.log('launching instances')
     const ec2Data = await ec2.runInstances(ec2Params).promise();
     // gets a list of all the instances crfeated
     const instances = ec2Data.Instances;
+    console.log('instances: ', instances);
 
     //grabs all the instance ids
     const isntanceIds = instances.map((instance: any) => {console.log('instance: ', instance.InstanceId); return instance.InstanceId});
@@ -150,7 +186,7 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-con
     const sleep = (ms:number) => new Promise(resolve => setTimeout(resolve, ms));
 
     //waits for instances to be ready to be described to get their ips
-    await sleep(shards * (replicas+1) * 2000);
+    await sleep(shardsValue * (replicasValue+1) * 2000);
 
     //gets the the details of the instances to grab the IPs
     const IPData = await ec2.describeInstances({InstanceIds: isntanceIds}).promise();
@@ -175,14 +211,14 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-con
     #!/bin/bash
     sudo yum update
     sudo amazon-linux-extras install redis6 -y
-    sleep 30
-    echo "yes" | redis-cli --cluster create ${ips.map((ip: string, index: number) => `${ip}:6379`).join(' ')} --cluster-replicas ${replicas} -a ${requirePass}
+    sleep 20
+    echo "yes" | redis-cli --cluster create ${ips.map((ip: string, index: number) => `${ip}:6379`).join(' ')} --cluster-replicas ${replicasValue} -a ${masterAuth}
     `
     console.log('runClusterScript: ', runClusterScript)
 
     const starterEc2Params = {
       ImageId: 'ami-0323ead22d6752894',
-      InstanceType: instanceType,
+      InstanceType: serverType,
       KeyName: keyPairName,
       MinCount: 1,
       MaxCount: 1,
@@ -201,13 +237,12 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-con
     const starterInstanceId = starterEc2Data.Instances[0].InstanceId; 
 
        //wait for the script to be run
-    // await ec2.waitFor('instanceStatusOk', {InstanceIds: [starterInstanceId]}).promise();
+    await ec2.waitFor('instanceStatusOk', {InstanceIds: [starterInstanceId]}).promise();
 
        //since we just needed this node to start the cluster, we can just get rid of it when we're done
-    // ec2.stopInstances({InstanceIds: [starterInstanceId]}).promise();
+    ec2.stopInstances({InstanceIds: [starterInstanceId]}).promise();
 
-
-
+    res.locals.ips = ips;
 
     
     next();

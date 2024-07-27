@@ -18,6 +18,30 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  }, 
+  vpcID: {
+    type: String,
+    required: false
+  },
+  subnetId: {
+    type: String,
+    required: false
+  },
+  amiPublicKey: {
+    type: String,
+    required: false
+  },
+  amiSecretKey: {
+    type: String,
+    required: false
+  },
+  region: {
+    type: String,
+    required: false
+  },
+  clusterIPs: {
+    type: Array,
+    required: false
   }
 },
 {

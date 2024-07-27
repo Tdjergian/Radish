@@ -3,21 +3,21 @@ import { createSlice } from '@reduxjs/toolkit';
 const redisFormSlice = createSlice({
   name:'redis',
   initialState:{
-    port:'',
+    port: 6379,
     daemonize: false,
     clusterEnabled: true, 
-    masterauth: '', 
+    masterAuth: '', 
     masteruser: '',
-    saveSeconds: 5,
-    saveChanges: 1,
+    saveSeconds: 1000,
+    saveChanges: 1000,
     appendonly: false,
     appendfsync: 'everysec',
     loglevel: 'notice',
-    timeout: 0,
+    timeout: 1000,
     rdbcompression: true,
     rdbchecksum: true, 
     resplicaServeStaleData: true,
-    maxmemory: 0,
+    maxmemory: 5368709120,
     maxmemoryPolicy: 'noeviction',
 
 
@@ -28,16 +28,16 @@ const redisFormSlice = createSlice({
       return action.payload;
     },
     setPort:(state,action)=>{
-      state.name = action.payload;
+      state.port = action.payload;
     },
     setDaemonize:(state,action)=>{
-      state.email = action.payload;
+      state.daemonize = action.payload;
     },
     setclusterEnabled:(state,action)=>{
-      state.message = action.payload;
+      state.clusterEnabled = action.payload;
     },
     setMasterauth:(state,action)=>{
-      state.masteruath = action.payload;
+      state.masterAuth = action.payload;
     },
     setMasteruser:(state,action)=>{
       state.masteruser = action.payload;
@@ -78,5 +78,5 @@ const redisFormSlice = createSlice({
   }
 });
 
-export const { setPort, setDaemonize, setclusterEnabled } = redisFormSlice.actions;
+export const { setPort, setMasterauth, setMasteruser, setDaemonize, setLoglevel, setTimeout, setSaveChanges, setSaveSeconds, setAppendfsync, setAppendonly, setRdbchecksum, setRdbcompression, setResplicaServeStaleData, setMaxmemory, setMaxmemoryPolicy } = redisFormSlice.actions;
 export default redisFormSlice.reducer;

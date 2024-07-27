@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setRegion, setServerType, setOperatingSystem, setPricingData, setLoading, setError } from '../Redux/slices/awsSlice';
 import DeployModal from './DeployModal';
 
@@ -37,14 +38,13 @@ const operatingSystems = [
 const PricingForm = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const serverType = useSelector((state) => state.aws.serverType);
   const region = useSelector((state) => state.aws.region);
   const operatingSystem = useSelector((state) => state.aws.operatingSystem);
   const error = useSelector((state) => state.aws.error); 
   const shardsValue = useSelector(state => state.slider.shardsValue);
   const replicasValue = useSelector(state => state.slider.replicasValue);
-
-  const [modalShow, setModalShow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,6 +73,7 @@ const PricingForm = () => {
       const data = await response.json();
       console.log(data);
       dispatch(setPricingData(data));
+      navigate('/pricing-display'); // Navigate to the PricingDisplay component
     } catch (error) {
       dispatch(setError('There was an error fetching the pricing data.'));
     } finally {
@@ -92,16 +93,12 @@ const PricingForm = () => {
     dispatch(setOperatingSystem(e.target.value));
   };
 
-
-
-
-
   return (
     <div className="w-full container bg-black text-white p-4">
       <h2 className="text-center text-3xl section-header font-bold">AWS Deployment Pricing</h2>
       <div className="dropdown-container mt-4">
         <div className="dropdown-menu">
-          <label htmlFor="options1" className="text-white text-xl">Select a region:</label>
+          <label htmlFor="options1" className="text-white">Select a region:</label>
           <select
             id="options1"
             value={region}
@@ -114,8 +111,8 @@ const PricingForm = () => {
             ))}
           </select>
         </div>
-        <div className="dropdown-menu mt-4">
-          <label htmlFor="options2" className="text-white text-xl">Select a server type:</label>
+        <div className="dropdown-menu">
+          <label htmlFor="options2" className="text-white">Select a server type:</label>
           <select
             id="options2"
             value={serverType}
@@ -128,8 +125,8 @@ const PricingForm = () => {
             ))}
           </select>
         </div>
-        <div className="dropdown-menu redis-form-input mt-4">
-          <label htmlFor="options3" className="text-white text-xl">Select an operating system:</label>
+        <div className="dropdown-menu redis-form-input">
+          <label htmlFor="options3" className="text-white">Select an operating system:</label>
           <select
             id="options3"
             value={operatingSystem}
@@ -144,14 +141,13 @@ const PricingForm = () => {
         </div>
         <button
           onClick={handleSubmit}
-          className="btn-primary mt-4 text-xl"
+          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Submit
         </button>
         {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>
       <DeployModal />
-    
     </div>
   );
 };
