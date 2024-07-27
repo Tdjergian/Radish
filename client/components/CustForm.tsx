@@ -96,7 +96,7 @@ const RedisForm: FC = (): ReactElement => {
         <a data-tooltip-id="cluster-node-timeout" data-tooltip-content="Defines how long the node will wait for responses from other nodes before marking them as unreachable.  Once a node is marked as unreachable, within a Redis cluster, the failover process is initiated.  If no value is specified in the redis.conf file, then the default value is 15,000 (15 seconds)." className="text-xl">Node timeout (milliseconds)</a>
         <Tooltip id="cluster-node-timeout" className="tooltip" />
         <label htmlFor="cluster-node-timeout"></label>
-        <input name="cluster-node-timeout" onChange={(e)=>{console.log(e.target.value);dispatch(setTimeout(Number(e.target.value)))}} className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm mt-2 text-black" id="timeout" type="number" defaultValue={0} />
+        <input name="cluster-node-timeout" onChange={(e)=>{console.log(e.target.value);dispatch(setTimeout(Number(e.target.value)))}} className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm mt-2 text-black" id="timeout" type="number" defaultValue={1000} />
       </div>
 
       <div id="persistance">
@@ -104,14 +104,14 @@ const RedisForm: FC = (): ReactElement => {
           <a data-tooltip-id="saveSeconds" data-tooltip-content="Add a user-defined time period you want the Redis DB contents to be backed up to a file.  By default, Redis snapshotting is enabled and occurs at the following frequencies: Every 900 seconds (15 minutes) there is at least one change, every 5 minutes there is at least 10 changes, and every minute there are at least 10,000 changes." className="text-xl">Minimum time between RDB snapshots (seconds)</a>
           <Tooltip id="saveSeconds" className="tooltip" />
           <label htmlFor="saveSeconds"></label>
-          <input name="saveSeconds" id="saveSeconds" onChange={(e)=>{console.log(e.target.value);dispatch(setSaveSeconds(Number(e.target.value)))}} className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm mt-2 text-black" type="number" defaultValue={0}/>
+          <input name="saveSeconds" id="saveSeconds" onChange={(e)=>{console.log(e.target.value);dispatch(setSaveSeconds(Number(e.target.value)))}} className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm mt-2 text-black" type="number" defaultValue={1000}/>
         </div>
 
         <div className="redis-form-input">
           <a data-tooltip-id="saveChanges" data-tooltip-content="Add a user-defined number of changes that you want the Redis DB contents to be backed up to a file.  This value will be paired with the 'Minimum time between RDB snapshots'.  By default, Redis snapshotting is enabled and occurs at the following frequencies: Every 900 seconds (15 minutes) there is at least one change, every 5 minutes there is at least 10 changes, and every minute there are at least 10,000 changes." className="text-xl">Minimum number of changes to trigger an RDB snapshot</a>
           <Tooltip id="saveChanges" className="tooltip" />
           <label htmlFor="saveChanges"></label>
-          <input name="saveChanges" id="saveChanges" onChange={(e)=>{console.log(e.target.value);dispatch(setSaveChanges(Number(e.target.value)))}} className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm mt-2 text-black" type="number" defaultValue={1}/>
+          <input name="saveChanges" id="saveChanges" onChange={(e)=>{console.log(e.target.value);dispatch(setSaveChanges(Number(e.target.value)))}} className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm mt-2 text-black" type="number" defaultValue={1000}/>
         </div>
 
         <div className="redis-form-input">

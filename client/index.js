@@ -8,6 +8,7 @@ import Main from './container/Main';
 import AwsDeployment from './components/AwsDeployment.jsx';
 import PricingPage from './Pages/PricingPage.jsx';
 import PricingForm from './components/PricingForm.jsx';
+import PricingDisplay from './components/PricingDisplay.jsx';
 import Performance from './components/Performance.tsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
@@ -34,6 +35,7 @@ root.render(
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pricing" element={<PricingForm />} />
+          <Route path="/pricing-display" element={<PricingDisplay />} />
           <Route path="/aws" element={<AwsDeployment />} />
           <Route path="/performance" element={<Performance />} />
         </Route>

@@ -49,4 +49,20 @@ const verifyCookie = async (req, res, next) => {
 
 }
 
-module.exports = { protect, verifyCookie }
+const checkUser = async (req, res, next) => {
+  const token = req.cookies.authToken;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select('-password');
+    if(!user) {
+      next();
+    }
+    res.locals.user = user;
+    next();
+  }catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { protect, verifyCookie, checkUser }

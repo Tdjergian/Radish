@@ -46,7 +46,7 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
  
   const securityGroupParams: {Description: string; GroupName: string; VpcId: String} = {
     Description: 'Security group for Redis Cluster',
-    GroupName: 'RedisClusterSecurityGroup9',
+    GroupName: 'RedisClusterSecurityGroup10',
     VpcId: vpcId
   };
 
@@ -240,10 +240,9 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-con
     await ec2.waitFor('instanceStatusOk', {InstanceIds: [starterInstanceId]}).promise();
 
        //since we just needed this node to start the cluster, we can just get rid of it when we're done
-    // ec2.stopInstances({InstanceIds: [starterInstanceId]}).promise();
+    ec2.stopInstances({InstanceIds: [starterInstanceId]}).promise();
 
-
-
+    res.locals.ips = ips;
 
     
     next();

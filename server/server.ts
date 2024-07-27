@@ -4,9 +4,12 @@ const bodyParser = require('body-parser');
 const { createClient } = require('redis');
 const { createFiles } = require('./controllers/fileGenerationController');
 const { getEC2Pricing } = require('./controllers/awsPricingController');
+const {checkUser } = require('./controllers/authController');
+const { saveCluster } = require('./controllers/userController');
 const Redis = require('ioredis');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+
 
 const {
   connectUserRedis,
@@ -99,7 +102,7 @@ app.post('/api/createFiles', createFiles, (req: Request, res: Response) => {
 });
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
-app.post('/getPricing', getEC2Pricing, (req: Request, res: Response) => {
+app.post('/api/getPricing', getEC2Pricing, (req: Request, res: Response) => {
   res.status(200).json(res.locals.pricingTermsArray);
 });
 
@@ -143,8 +146,10 @@ app.post(
 
 app.post(
   '/api/testSecurityGroupAndEC2Launch',
+  checkUser,
   createSecurityGroup,
   launchEC2s,
+  saveCluster,
   (req: Request, res: Response) => {
     res.status(200).send('Security Group and EC2s Launched');
   }

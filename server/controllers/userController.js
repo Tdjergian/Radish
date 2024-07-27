@@ -80,9 +80,54 @@ const getUser = async (req, res) => {
   
 };
 
+const saveCluster = async (req, res, next) => {
+  const {
+    vpcID,
+    subnetId,
+    amiPublicKey,
+    amiSecretKey,
+    region
+  } = req.body;
+  
+  if(!res.locals.user) {next()}
+  const user = res.locals.user;
+try{
+  await user.set({
+    vpcID,
+    subnetId,
+    amiPublicKey,
+    amiSecretKey,
+    region,
+    clusterIPs: res.locals.ips
+  });
+
+  next();
+}
+catch (error) {
+  console.error(error);
+  res.status(500).json({ error: 'Internal server error'});
+}
+  
+};
+
+const getClusterIps = async (req, res) => {
+
+  try{
+    const user = await User.findById(req.user.id);
+    res.locals.ips = user.clusterIPs;
+    next();
+
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error'});
+  };
+
+}
+
 // generate json web token
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {expiresIn: '30d'})
 }
 
-module.exports = { registerUser, loginUser, getUser };
+module.exports = { registerUser, loginUser, getUser, saveCluster, getClusterIps };
