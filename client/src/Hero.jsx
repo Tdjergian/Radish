@@ -7,7 +7,7 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
   const logoStyle = {
@@ -131,7 +131,9 @@ export default function Hero() {
               theme.palette.mode === "light"
                 ? 'url("/static/images/templates/templates-images/hero-light.png")'
                 : 'url("/static/images/templates/templates-images/hero-dark.png")',
-            backgroundSize: "cover",
+            backgroundSize: "100% 100%",
+            backgroundPosition:"center",
+            backgroundRepeat:"no-repeat",
             borderRadius: "10px",
             outline: "1px solid",
             outlineColor:

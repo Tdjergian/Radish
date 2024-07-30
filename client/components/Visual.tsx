@@ -1,51 +1,53 @@
 import React, { useRef, useEffect, ReactElement, useState } from "react";
 import * as d3 from "d3";
-import { SimulationNodeDatum, D3DragEvent  } from "d3";
+import { SimulationNodeDatum, D3DragEvent } from "d3";
 import { useSelector } from "react-redux";
 import master_logo from "../asset/redis_logo.svg";
 import replica_logo from "../asset/replica_logo.svg";
 import client_logo from "../asset/client_logo.svg";
 import { useAppSelector, useAppDispatch } from "../Redux/store";
 import { Diversity1 } from "@mui/icons-material";
+import "../../public/style.css";
 
-interface replicaObj extends SimulationNodeDatum{
-  id: string,
-  type: string,
-  master: string,
+interface replicaObj extends SimulationNodeDatum {
+  id: string;
+  type: string;
+  master: string;
 }
 
 interface shardObj {
-  id: string,
-  type: string,
-  replicas: replicaObj[],
-  x?: number,
-  y?: number
-
+  id: string;
+  type: string;
+  replicas: replicaObj[];
+  x?: number;
+  y?: number;
 }
 
-interface nodeObj extends SimulationNodeDatum{
-  id: string,
-  type: string,
-  master?: string,
-  replicas?: replicaObj[],
-
+interface nodeObj extends SimulationNodeDatum {
+  id: string;
+  type: string;
+  master?: string;
+  replicas?: replicaObj[];
 }
 
 interface test {
-  index?: number
+  index?: number;
   id: string;
   type: string;
 }
 
-
-
-const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boolean}): ReactElement => {
+const Visual: React.FC<{ prototype: boolean }> = ({
+  prototype,
+}: {
+  prototype: boolean;
+}): ReactElement => {
   const svgRef = useRef();
   const dispatch = useAppDispatch();
-  const sentinel: number = useAppSelector((state) => state.slider.sentinelsValue);
+  const sentinel: number = useAppSelector(
+    (state) => state.slider.sentinelsValue
+  );
   const shard: number = useAppSelector((state) => state.slider.shardsValue);
   const replica: number = useAppSelector((state) => state.slider.replicasValue);
-  
 
   useEffect(() => {
     const width: number = 800;
@@ -67,7 +69,7 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
       const shardObj: shardObj = {
         id: `shard-${i}`,
         type: "shard",
-        replicas: [], 
+        replicas: [],
       };
       shardData.push(shardObj);
       for (let j = 0; j < replica; j++) {
@@ -101,31 +103,36 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force(
         "collide",
-        d3.forceCollide<nodeObj>().radius((d) =>
-          d.type === "client"
-            ? clientSize / 2
-            : d.type === "shard"
-            ? shardSize / 2
-            : replicaSize / 2
-        )
+        d3
+          .forceCollide<nodeObj>()
+          .radius((d) =>
+            d.type === "client"
+              ? clientSize / 2
+              : d.type === "shard"
+              ? shardSize / 2
+              : replicaSize / 2
+          )
       );
 
-      const dragstarted = (event: D3DragEvent<SVGAElement, nodeObj, nodeObj>, d: nodeObj): void => {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
-  
-      const dragged = (event: any, d: nodeObj) => {
-        d.fx = event.x;
-        d.fy = event.y;
-      }
-  
-      const dragended = (event: any, d: nodeObj) => {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      }
+    const dragstarted = (
+      event: D3DragEvent<SVGAElement, nodeObj, nodeObj>,
+      d: nodeObj
+    ): void => {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    };
+
+    const dragged = (event: any, d: nodeObj) => {
+      d.fx = event.x;
+      d.fy = event.y;
+    };
+
+    const dragended = (event: any, d: nodeObj) => {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    };
 
     const link = svg
       .selectAll("line")
@@ -169,7 +176,9 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
           .on("drag", dragged)
           .on("end", dragended)
       )
-      .on("click", (event, d) => {console.log('clicked', d)});
+      .on("click", (event, d) => {
+        console.log("clicked", d);
+      });
 
     simulation.on("tick", () => {
       link
@@ -182,7 +191,7 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
     });
 
     function createLinks(shardData: shardObj[]) {
-      const linksArray: {source: string, target: string}[] = [];
+      const linksArray: { source: string; target: string }[] = [];
       shardData.forEach((shard) => {
         shard.replicas.forEach((replica) => {
           linksArray.push({ source: shard.id, target: replica.id });
@@ -193,8 +202,6 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
       return linksArray;
     }
 
-
-
     return () => {
       svg.selectAll("*").remove();
     };
@@ -202,9 +209,15 @@ const Visual: React.FC<{prototype: boolean}> = ({ prototype } : { prototype: boo
 
   return (
     <div className="visualizer-background">
-      <svg ref={svgRef} style={{position: 'sticky'}}></svg> 
+      <h1 className="text-3xl font-bold text-center mb-4 text-black">
+        Configuration Visualization
+      </h1>
+      <h5 className="text-lg text-center mb-2 text-black">
+        Try to drag your nodes below
+      </h5>
+      <svg ref={svgRef} style={{ position: "sticky" }}></svg>
     </div>
-  ) ;
+  );
 };
 
 export default Visual;

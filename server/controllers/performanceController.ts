@@ -15,9 +15,12 @@ const performanceController: { [key: string]: any } = {};
 
 const cluster = new Redis.Cluster(
   [
-    { host: '35.92.138.72', port: 6379 },
-    { host: '54.245.154.133', port: 6379 },
-    { host: '18.246.149.105', port: 6379 },
+    // { host: '35.92.138.72', port: 6379 },
+    // { host: '54.245.154.133', port: 6379 },
+    // { host: '18.246.149.105', port: 6379 },
+    { host: '52.38.48.179', port: 6379 },
+    { host: '52.25.17.33', port: 6379 },
+    { host: '34.214.39.67', port: 6379 },
   ],
   { redisOptions: { password: 12345 } }
 );
@@ -190,7 +193,8 @@ performanceController.runBenchmark = async (
     //cluster mode
     // const command = `redis-benchmark -h 54.190.149.145 -h 34.219.192.177 -h 54.244.103.234 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} `;
 
-    const command = `redis-benchmark -h 35.92.138.72 -h 54.245.154.133 -h 18.246.149.105 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
+    //const command = `redis-benchmark -h 34.219.192.177 -h 54.244.103.234 -h 54.190.149.145 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
+    const command = `redis-benchmark -h 52.38.48.179 -h 52.25.17.33 -h 34.214.39.67 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
     exec(command, (error, stdout, stderr) => {
       console.log('inside exec');
       if (error) {
