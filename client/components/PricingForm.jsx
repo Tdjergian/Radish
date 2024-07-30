@@ -94,8 +94,8 @@ const PricingForm = () => {
   };
 
   return (
-    <div className="container bg-black text-white p-4">
-      <h2 className="text-center">AWS Pricing for Your Custom Redis Config</h2>
+    <div className="w-full container bg-black text-white p-4">
+      <h2 className="text-center text-3xl section-header font-bold">AWS Deployment Pricing</h2>
       <div className="dropdown-container mt-4">
         <div className="dropdown-menu">
           <label htmlFor="options1" className="text-white">Select a region:</label>
