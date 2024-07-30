@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
   }
 }
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   console.log('request to login user', req.body);
   const { email, password } = req.body;
 
@@ -61,8 +61,12 @@ const loginUser = async (req, res) => {
     // For testing the catch block for the loginUser controller
     // throw new Error('Intentional error for testing');
     console.log('success')
-    res.cookie('authToken', generateToken(user._id), { httpOnly: true });
-    return res.json({ token: generateToken(user._id) });
+    const token = generateToken(user._id);
+    res.cookie('authToken', token, { httpOnly: true });
+    const ips = user.clusterIPs;
+    res.status(200).json({ token, ips });
+    
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -110,7 +114,7 @@ catch (error) {
   
 };
 
-const getClusterIps = async (req, res) => {
+const getClusterIps = async (req, res, next) => {
 
   try{
     const user = await User.findById(req.user.id);

@@ -137,12 +137,15 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
       // console.log(pricingTermsArray);
       res.locals.pricingTermsArray = pricingTermsArray;
       next();
+      console.log('EC2 pricing fetched successfully');
 
   } catch (err) {
       console.error('Error fetching EC2 pricing:', err);
       // res.status(500).send('An error occurred while fetching EC2 pricing');
       next(err);
   }
+
+  console.log('still in here');
 };
 
 module.exports = awsPricingController;

@@ -46,7 +46,7 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
  
   const securityGroupParams: {Description: string; GroupName: string; VpcId: String} = {
     Description: 'Security group for Redis Cluster',
-    GroupName: 'RedisClusterSecurityGroup10',
+    GroupName: 'RedisClusterSecurityGroup11',
     VpcId: vpcId
   };
 
@@ -148,7 +148,7 @@ awsSDKController.launchEC2s = async (req: Request, res: Response, next: NextFunc
 sudo yum update
 sudo amazon-linux-extras install redis6 -y
 sleep 20
-redis-server --cluster-enabled yes --protected-mode no --port 6379 --cluster-config-file nodes.conf --requirepass ${masterAuth} --daemonize ${daemonize ? "yes" : "no"} --loglevel ${loglevel} --timeout ${timeout} --save ${saveSeconds} ${saveChanges} --appendonly ${appendonly ? "yes" : "no"} --appendfsync ${appendfsync} --rdbcompression ${rdbcompression ? "yes" : "no"} --rdbchecksum ${rdbchecksum ? "yes" : "no"} --maxmemory ${maxmemory} --maxmemory-policy ${maxmemoryPolicy}`
+redis-server --cluster-enabled yes --protected-mode no --port 6379 --dir ./ --cluster-config-file nodes.conf --logfile redis.logs --masterauth ${masterAuth} --requirepass ${masterAuth} --daemonize ${daemonize ? "yes" : "no"} --loglevel ${loglevel} --timeout ${timeout} --save ${saveSeconds} ${saveChanges} --appendonly ${appendonly ? "yes" : "no"} --appendfsync ${appendfsync} --rdbcompression ${rdbcompression ? "yes" : "no"} --rdbchecksum ${rdbchecksum ? "yes" : "no"} --maxmemory ${maxmemory} --maxmemory-policy ${maxmemoryPolicy}`
 
   console.log('redisStartupScript: ', redisStartupScript)
 

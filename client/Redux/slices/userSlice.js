@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { useAppDispatch } from "../store";
+import { setCurrentIps } from "./realClusterData";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -50,6 +52,7 @@ const authService = {
     const data = await response.json();
     console.log("Parsed response from server:", data);
     localStorage.setItem("userToken", data.token);
+    
     return data;
   },
 };
