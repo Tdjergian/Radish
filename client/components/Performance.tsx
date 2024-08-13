@@ -11,8 +11,11 @@ import {
 } from '@mui/material';
 import { MemoryData, CPUData, BenchmarkData } from '../../types/types';
 import { cpuUsage } from 'process';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../Redux/store';
 
 const Performance: FC = (): ReactElement => {
+  const navigate = useNavigate();
   const [memoryData, setMemoryData] = useState<MemoryData>({
     usedMemory: 0,
     peakUsedMemory: 0,
@@ -23,6 +26,15 @@ const Performance: FC = (): ReactElement => {
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const userState = useAppSelector((state) => state.user);
+  console.log(`userState`, userState);
+
+  useEffect(() => {
+    if (!userState.user){
+      navigate('/login');
+    }
+  },[]);
 
   // useEffect(() => {
   //   const fetchMemoryData = async () => {
