@@ -24,60 +24,62 @@ const Performance: FC = (): ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchMemoryData = async () => {
-      try {
-        const response = await fetch('/api/memory', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        console.log(`response`, response);
-        if (!response.ok) {
-          throw new Error(`memory front end error ${response.status}`);
-        }
-        const data: MemoryData = await response.json();
-        setMemoryData(data);
-      } catch (err) {
-        console.error(`Error fetching memory data:`, err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMemoryData = async () => {
+  //     try {
+  //       const response = await fetch('/api/memory', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //       });
+  //       console.log(`response`, response);
+  //       if (!response.ok) {
+  //         throw new Error(`memory front end error ${response.status}`);
+  //       }
+  //       const data: MemoryData = await response.json();
+  //       setMemoryData(data);
+  //     } catch (err) {
+  //       console.error(`Error fetching memory data:`, err);
+  //     }
+  //   };
 
-    const fetchCPUData = async () => {
-      try {
-        const response = await fetch('/api/cpu', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
+  //   const fetchCPUData = async () => {
+  //     try {
+  //       const response = await fetch('/api/cpu', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //       });
 
-        if (!response.ok) {
-          throw new Error(`cpu front end error ${response.status}`);
-        }
-        const data: CPUData = await response.json();
-        console.log(`data`, data);
-        setCPUData(data);
-      } catch (err) {
-        console.error(`Error fetching cpu data`, err);
-      }
-    };
-    fetchMemoryData();
-    fetchCPUData();
-  }, []);
+  //       if (!response.ok) {
+  //         throw new Error(`cpu front end error ${response.status}`);
+  //       }
+  //       const data: CPUData = await response.json();
+  //       console.log(`data`, data);
+  //       setCPUData(data);
+  //     } catch (err) {
+  //       console.error(`Error fetching cpu data`, err);
+  //     }
+  //   };
+  //   fetchMemoryData();
+  //   fetchCPUData();
+  // }, []);
 
   const runBenchmark = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/benchmark', {
-        method: 'GET',
-      });
+      const response = await fetch('/api/benchmark');
 
       if (!response.ok) {
         throw new Error(`Error running benchmark ${response.status}`);
       }
 
       const result = await response.json();
+      console.log(`result`, result);
+      
       if (result.success) {
+        console.log('success')
         setBenchmarkData({ BenchmarkResult: result.output });
+        console.log(`BenchmarkData:`, BenchmarkData);
       } else {
         setError(`Benchmark failed: ${result.error}`);
       }

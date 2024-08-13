@@ -1,10 +1,11 @@
 import { Memory } from '@mui/icons-material';
 import express, { Request, Response } from 'express';
+// import { verifyCookie } from './controllers/authController';
 const bodyParser = require('body-parser');
 const { createClient } = require('redis');
 const { createFiles } = require('./controllers/fileGenerationController');
 const { getEC2Pricing } = require('./controllers/awsPricingController');
-const {checkUser } = require('./controllers/authController');
+const {checkUser, verifyCookie} = require('./controllers/authController');
 const { saveCluster } = require('./controllers/userController');
 const Redis = require('ioredis');
 const mongoose = require('mongoose');
@@ -103,8 +104,10 @@ app.post('/api/createFiles', createFiles, (req: Request, res: Response) => {
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
 app.post('/api/getPricing', getEC2Pricing, (req: Request, res: Response) => {
+console.log('sending pricing terms array');
   res.status(200).json(res.locals.pricingTermsArray);
 });
+
 
 app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
   res.status(200).send('Task definition created successfully');
@@ -112,6 +115,8 @@ app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
 
 app.post(
   '/api/memory',
+  verifyCookie,
+  connectUserRedis,
   /*connectUserRedis,*/ getMemory,
   /*disconnectRedis,*/ (req, res) => {
     //res.status(200).send("connect to redis");
@@ -123,6 +128,8 @@ app.post(
 
 app.post(
   '/api/cpu',
+    verifyCookie,
+  connectUserRedis,
   /*connectUserRedis,*/ getUsedCPU,
   /*disconnectRedis,*/ (req, res) => {
     //res.status(200).send("connect to redis");
@@ -131,10 +138,7 @@ app.post(
   }
 );
 
-app.get('/api/benchmark', runBenchmark, (req, res) => {
-  console.log('running benchmark');
-  res.status(200);
-});
+
 
 app.post(
   '/api/testSecurityGroup',
@@ -149,9 +153,10 @@ app.post(
   checkUser,
   createSecurityGroup,
   launchEC2s,
+  checkUser,
   saveCluster,
   (req: Request, res: Response) => {
-    res.status(200).send('Security Group and EC2s Launched');
+    res.status(200).json(res.locals.ips);
   }
 );
 
@@ -165,9 +170,9 @@ app.post(
 
 app.post("/api/testRequestBody", (req: Request, res: Response) => {console.log(req.body); res.status(200).send("Request Body Received")});
 
-app.get('/api/benchmark', runBenchmark, (req, res) => {
-    console.log('running benchmark');
-    // res.status(200).json(res.locals.benchmarkData);
+app.get('/api/benchmark', verifyCookie, runBenchmark, (req: Request, res: Response) => {
+    console.log('backend', res.locals.benchmark);
+    res.status(200).json(res.locals.benchmark);
   });
 
 //add connectUserRedis if connect to redis cloud

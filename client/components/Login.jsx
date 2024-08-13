@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { loginUser, resetUser } from '../Redux/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { setCurrentIps } from '../Redux/slices/realClusterData';
 import '../stylesheets/loginOrRegister.css'
 
 const Login = () => {
@@ -25,6 +26,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await dispatch(loginUser({email, password}));
+      console.log('user', user)
     } catch(err) {
       console.log(err);
     }
@@ -51,6 +53,7 @@ const Login = () => {
     const handleGoogleSignIn = async () => {
       try {
         await dispatch(loginUser()); // No need to pass email and password here
+
       } catch (err) {
         console.log(err);
       }

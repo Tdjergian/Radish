@@ -7,7 +7,8 @@ const realClusterDataSlice = createSlice({
   initialState:{
     currentNode: '',
     ec2ClusterData: {},
-    redisClusterData: {}
+    redisClusterData: {},
+    currentIps: []
   },
   reducers:{
     setEc2ClusterData:(state, action: PayloadAction<Ec2Instance[]>)=>{
@@ -22,9 +23,12 @@ const realClusterDataSlice = createSlice({
     }, 
     setCurrentNode:(state, action: PayloadAction<string>)=>{
       state.currentNode = action.payload;
-    }
+    },
+    setCurrentIps:(state, action: PayloadAction<string[]>)=>{
+      state.currentIps = action.payload
+    },
   }
 });
 
-export const { setEc2ClusterData, setRedisClusterData, setCurrentNode } = realClusterDataSlice.actions;
+export const { setEc2ClusterData, setRedisClusterData, setCurrentNode, setCurrentIps } = realClusterDataSlice.actions;
 export default realClusterDataSlice.reducer;

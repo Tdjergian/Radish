@@ -1,6 +1,7 @@
 import React, { useState, FC, ReactElement } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../Redux/store";
+import { setCurrentIps } from "../Redux/slices/realClusterData";
 
 const DeployModal: FC = ():ReactElement => {
   const dispatch = useAppDispatch();
@@ -50,6 +51,9 @@ const DeployModal: FC = ():ReactElement => {
         ...sliderState,
       }),
     });
+    const ips = await response.json();
+    dispatch(setCurrentIps(ips));
+
   };
 
 
