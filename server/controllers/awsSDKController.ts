@@ -17,8 +17,9 @@ awsSDKController.configureSDK = (req: Request, res: Response, next: NextFunction
 
 awsSDKController.createSecurityGroup = async (req: Request, res: Response, next: NextFunction) => {
 
+  console.log('')
   const { 
-    vpcId,
+    vpcID,
     region, 
     amiPublicKey,
     amiSecretKey
@@ -42,12 +43,12 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
 
   const ec2 = new aws.EC2();
 
-  console.log('vpcID: ', vpcId)
+  console.log('vpcID: ', vpcID)
  
   const securityGroupParams: {Description: string; GroupName: string; VpcId: String} = {
     Description: 'Security group for Redis Cluster',
     GroupName: 'RedisClusterSecurityGroup11',
-    VpcId: vpcId
+    VpcId: vpcID
   };
 
   try {
@@ -243,7 +244,7 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --dir ./ --cl
     ec2.stopInstances({InstanceIds: [starterInstanceId]}).promise();
 
     res.locals.ips = ips;
-
+    console.log('res.locals.ips: ', res.locals.ips)
     
     next();
   } catch (err) {

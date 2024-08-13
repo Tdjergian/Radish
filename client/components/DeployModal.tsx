@@ -22,6 +22,7 @@ const DeployModal: FC = ():ReactElement => {
 
   const createEC2Cluster = async () => {
 
+
     console.log('req.body: ', {
       clusterName,
       amiPublicKey,
@@ -83,11 +84,13 @@ const DeployModal: FC = ():ReactElement => {
               <input type='text' value={vpcID} onChange={e => {console.log(e.target.value); setVpcID(e.target.value)}} className='text-black border border-gray-300 rounded w-full p-2' />
               <label className="text-black">Subnet ID</label>
               <input type='text' value={subnetId} onChange={e => {console.log(e.target.value); setSubnetId(e.target.value)}} className='text-black border border-gray-300 rounded w-full p-2' />
+              <label className="text-black">Key Pair</label>
               <input type="text" value={keyPairName} onChange={e => {console.log(e.target.value); setKeyPairName(e.target.value)}} className='text-black border border-gray-300 rounded w-full p-2' />
             </div>
             <footer>
               <Button  className='text-black mt-4 bg-grey-500 py-2 px-4 rounded' onClick={closeModal}>Close</Button>
               <Button  className='text-black mt-4 bg-red-800 py-2 px-4 rounded' onClick={createEC2Cluster}>CREATE THE CLUSTER</Button>
+              <Button onClick={()=>{console.log('vpcID', vpcID)}}>Test user</Button>
             </footer>
           </div>
         </div>

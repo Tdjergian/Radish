@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path'); 
 import { Request, Response, NextFunction } from 'express'
 import { DockerComposeFile } from '../../types/types';
+import { exec } from 'child_process';
+
 
 
 
@@ -43,6 +45,8 @@ fileGenerationController.createFiles = (req: Request, res: Response, next) => {
   let redisFilesWritten = 0;
 
   let port = Number(portNumber);
+
+  const ips: String[] = [];
 
   const dockerCompose: DockerComposeFile = {
       version: '3.8',
@@ -141,12 +145,23 @@ bind 0.0.0.0`;
         dockerCompose.volumes[volumeName] = {};
 
         // Increment port number as each Redis instance will run on a different port
+        ips.push(`172.20.0.${i+1}${j}:${port}`);
         port++;
       }
     }
     // res.status(200)
+    res.locals.ips = ips;
+    console.log('ips: ', ips);
 
     next();
+  };
+
+  fileGenerationController.initiateCluster = (req: Request, res: Response, next: NextFunction) => {
+    const startupScript = `#!/bin/bash
+docker-compose up -d
+
+`
+    exec('docker-compose up -d', {cwd: './../output'}, (err, stdout, stderr) => {});
   };
 
   module.exports = fileGenerationController;

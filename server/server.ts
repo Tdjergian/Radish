@@ -1,5 +1,6 @@
 import { Memory } from '@mui/icons-material';
 import express, { Request, Response } from 'express';
+import User from './models/User';
 // import { verifyCookie } from './controllers/authController';
 const bodyParser = require('body-parser');
 const { createClient } = require('redis');
@@ -160,13 +161,40 @@ app.post(
   }
 );
 
-app.post(
-  '/api/testIPAddressRequest',
-  testIPRequest,
-  (req: Request, res: Response) => {
-    res.status(200).send('IP Address Requested');
-  }
-);
+app.get(
+  '/api/testUser', checkUser, async (req, res, next)=>{
+		const vpcID	= "vpc-05e65564c244f4fce";
+		const amiSecretKey = "cDw/6E5BiFJTzzI7jSBGiMBnsXRbvfiPMzNRCmQZ";
+		const amiPublicKey = "cDw/6E5BiFJTzzI7jSBGiMBnsXRbvfiPMzNRCmQZ";
+		const region = "us-west-2";
+		const ips = [
+			'54.214.149.150',
+			'35.85.56.71',
+			'52.88.71.122',
+			'34.211.34.118',
+			'54.191.197.151',
+			'35.85.34.245'
+		]
+		
+
+
+		try{
+			await User.findOneAndUpdate({_id: res.locals.user._id},{
+				vpcID: vpcID,
+				amiPublicKey: amiPublicKey,
+				amiSecretKey: amiSecretKey,
+				region: region,
+				clusterIPs: ips
+			}, {new: true});
+			const updated = await User.findOne({_id: res.locals.user._id});
+			console.log('User updated: ' + updated);
+			next();
+		}
+		catch(err){
+			console.error(err);
+			res.status(500).send('Internal Server Error');
+		}
+	}, (req: Request, res: Response) => {console.log('res.locals.user', res.locals.user); res.status(200).json(res.locals.user)});
 
 app.post("/api/testRequestBody", (req: Request, res: Response) => {console.log(req.body); res.status(200).send("Request Body Received")});
 

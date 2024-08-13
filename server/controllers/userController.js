@@ -95,16 +95,17 @@ const saveCluster = async (req, res, next) => {
   
   if(!res.locals.user) {next()}
   const user = res.locals.user;
+  console.log('user in saveCluster', user);
 try{
-  await user.set({
-    vpcID,
-    subnetId,
-    amiPublicKey,
-    amiSecretKey,
-    region,
+  await User.findOneAndUpdate({_id: user._id},{
+    vpcID: vpcID,
+    amiPublicKey: amiPublicKey,
+    amiSecretKey: amiSecretKey,
+    region: region,
     clusterIPs: res.locals.ips
-  });
+  }, {new: true});
 
+  console.log('user after set', user);
   next();
 }
 catch (error) {
