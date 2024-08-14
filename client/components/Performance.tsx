@@ -75,10 +75,11 @@ const Performance: FC = (): ReactElement => {
 
       const result = await response.json();
       console.log(`result`, result);
-      
+
       if (result.success) {
-        console.log('success')
-        setBenchmarkData({ BenchmarkResult: result.output });
+        console.log('success');
+        const filteredOutput = removeOutputData(result.output);
+        setBenchmarkData({ BenchmarkResult: filteredOutput });
         console.log(`BenchmarkData:`, BenchmarkData);
       } else {
         setError(`Benchmark failed: ${result.error}`);
@@ -88,6 +89,29 @@ const Performance: FC = (): ReactElement => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const removeOutputData = (output: string): string => {
+    return output
+      .replace(/^SET: rps=.*$/gm, '')
+      .replace(/^GET: rps=.*$/gm, '')
+      .replace(
+        /node \[\d+\] configuration:[\s\S]*?(?=node \[\d+\] configuration|Latency|Summary|$)/g,
+        '\n'
+      )
+      .replace(/multi-thread: yes[\s\S]*?threads: \d+/g, '')
+      .replace(
+        /Latency by percentile distribution:[\s\S]*?(?=Cumulative|Summary|$)/g,
+        '\n'
+      )
+      .replace(
+        /Cumulative distribution of latencies:[\s\S]*?(?=Summary|$)/g,
+        '\n'
+      )
+      .replace(/(====== SET ======|====== GET ======)/g, '\n\n$1')
+      .replace(/^GET:/m, '\n\n$&')
+      .replace(/\n{3,}/g, '\n')
+      .trim();
   };
 
   console.log('Memory State:', JSON.stringify(memoryData));
@@ -123,9 +147,13 @@ const Performance: FC = (): ReactElement => {
       </button>
       {BenchmarkData.BenchmarkResult && (
         <div>
-          <p>Benchmark results for 5 clients and 10 requests:</p>
+          <div style={{ marginBlock: 50 }}>
+            Benchmark results for 100 clients and 300 requests:
+          </div>
           <div style={{ maxWidth: 500 }}>
-            <pre>{BenchmarkData.BenchmarkResult}</pre>
+            <pre style={{ whiteSpace: 'pre-wrap', width: 700 }}>
+              {BenchmarkData.BenchmarkResult}
+            </pre>
           </div>
         </div>
       )}
