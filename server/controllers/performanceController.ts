@@ -60,9 +60,8 @@ performanceController.connectUserRedis = async (
   res: Response,
   next: NextFunction
 ) => {
- 
   console.log('in the connectUserRedis function');
-  
+
   // try {
   //   console.log(res.locals.user);
   //   const ips = res.locals.user.clusterIPs;
@@ -90,14 +89,13 @@ performanceController.connectUserRedis = async (
   try {
     const ips = res.locals.user.clusterIPs;
     console.log('res.locals.user ', res.locals.user);
-    const clusterNodes: {host: string, port: number}[] = [];
+    const clusterNodes: { host: string; port: number }[] = [];
     ips.forEach((ip: string) => {
       clusterNodes.push({
         host: ip,
         port: 6379,
       });
     });
-
 
     // console.log('clusterNodes', clusterNodes);
     // const redisClient = new Redis.Cluster(clusterNodes, {
@@ -125,7 +123,6 @@ performanceController.connectUserRedis = async (
 
     // res.locals.redisClient = redisClient;
     next();
-
   } catch (err) {
     return next({
       log: `redisController.connectUserRedis error ${err}`,
@@ -236,58 +233,37 @@ performanceController.runBenchmark = async (
   next: NextFunction
 ) => {
   console.log('in the runBenchmark function');
-    //   const host = process.env.HOST || 'localhost';
-    // const port = process.env.PORT || 6379;
-    // const num_clients = 100;
-    // const num_requests = 3;
-    // const tests = 'set,get';
-    // const password = process.env.REDIS_PASSWORD || 12345;
-    // console.log('inside benchmark');
 
-    
-    // const ips = res.locals.user.clusterIPs;
-    // let nodes = '';
-    // ips.forEach((ip: string) => {
-    //   nodes += `-h ${ip} `;
-    // });
+  const host = process.env.HOST || 'localhost';
+  const port = process.env.PORT || 6379;
+  const num_clients = 100;
+  const num_requests = 300;
+  const tests = 'set,get';
+  const password = process.env.REDIS_PASSWORD || 12345;
+  console.log('inside benchmark');
+  // const command = `redis-benchmark -h ${host} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
+  // cluster mode
+  // const command = `redis-benchmark -h 54.190.149.145 -h 34.219.192.177 -h 54.244.103.234 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} `;
+  const ips = res.locals.user.clusterIPs;
+  let nodes = '';
+  ips.forEach((ip: string) => {
+    nodes += `-h ${ip} `;
+  });
 
-    // const command = `redis-benchmark ${nodes} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} --cluster`;
-    // console.log('command', command);
-    // next();
+  const command = `redis-benchmark ${nodes} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} --cluster`;
+  console.log('command', command);
 
-  
-  
-    const host = process.env.HOST || 'localhost';
-    const port = process.env.PORT || 6379;
-    const num_clients = 100;
-    const num_requests = 300;
-    const tests = 'set,get';
-    const password = process.env.REDIS_PASSWORD || 12345;
-    console.log('inside benchmark');
-    // const command = `redis-benchmark -h ${host} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
-    // cluster mode
-    // const command = `redis-benchmark -h 54.190.149.145 -h 34.219.192.177 -h 54.244.103.234 -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} `;
-    const ips = res.locals.user.clusterIPs;
-    let nodes = '';
-    ips.forEach((ip: string) => {
-      nodes += `-h ${ip} `;
-    });
-
-    const command = `redis-benchmark ${nodes} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests} --cluster`;
-    console.log('command', command);
-
-    exec(command, (error, stdout, stderr) => {
-      console.log('inside exec');
-      if (error) {
-        console.error('Error running redis-benchmark:', stderr);
-        return res.status(500).json({ success: false, error: stderr });
-      }
-      console.log('Benchmark result:', stdout);
-      // return res.status(200).json({ success: true, output: stdout });
-      res.locals.benchmark ={success: true, output: stdout};
-      next();
-    });
-
+  exec(command, (error, stdout, stderr) => {
+    console.log('inside exec');
+    if (error) {
+      console.error('Error running redis-benchmark:', stderr);
+      return res.status(500).json({ success: false, error: stderr });
+    }
+    console.log('Benchmark result:', stdout);
+    // return res.status(200).json({ success: true, output: stdout });
+    res.locals.benchmark = { success: true, output: stdout.toString() };
+    next();
+  });
 };
 
 module.exports = performanceController;
