@@ -1,6 +1,7 @@
 import { Memory } from '@mui/icons-material';
 import express, { Request, Response } from 'express';
 import User from './models/User';
+const { getClusterIps } = require('./controllers/userController');
 // import { verifyCookie } from './controllers/authController';
 const bodyParser = require('body-parser');
 const { createClient } = require('redis');
@@ -116,7 +117,7 @@ app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
 
 app.post(
   '/api/memory',
-  verifyCookie,
+  checkUser,
   connectUserRedis,
   /*connectUserRedis,*/ getMemory,
   /*disconnectRedis,*/ (req, res) => {
@@ -129,8 +130,9 @@ app.post(
 
 app.post(
   '/api/cpu',
-    verifyCookie,
+    checkUser,
   connectUserRedis,
+
   /*connectUserRedis,*/ getUsedCPU,
   /*disconnectRedis,*/ (req, res) => {
     //res.status(200).send("connect to redis");

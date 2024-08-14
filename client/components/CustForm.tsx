@@ -84,7 +84,7 @@ const RedisForm: FC = (): ReactElement => {
               data-tooltip-content="The password used for authenticating the Redis replica (slave) with the master instance in each shard.  If your Redis cluster setup involves replication, the 'masterauth' parameter will be added to each replica's config file."
               className="text-xl"
             >
-              Masterauth password (optional)
+              Masterauth password (REQUIRED)
             </a>
             <Tooltip id="masterauth" className="tooltip" />
             <label htmlFor="masterauth"></label>
@@ -405,14 +405,7 @@ const RedisForm: FC = (): ReactElement => {
         </div>
       </form>
       <div>
-        <button
-          className="text-white"
-          onClick={() => {
-            console.log(formRef.current);
-          }}
-        >
-          test
-        </button>
+       
       </div>
     </>
   );

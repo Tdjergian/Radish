@@ -118,7 +118,7 @@ catch (error) {
 const getClusterIps = async (req, res, next) => {
 
   try{
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(res.locals.user.id);
     res.locals.ips = user.clusterIPs;
     next();
 

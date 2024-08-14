@@ -1,12 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import DeployModal from './DeployModal';
+import PricingForm from './PricingForm';
 
 const PricingDisplay = () => {
   const pricingData = useSelector((state) => state.aws.pricingData);
   const loading = useSelector((state) => state.aws.loading);
   const error = useSelector((state) => state.aws.error);
 
-  const sortedPricingData = [...pricingData].sort((a, b) => a.monthlyTotalPrice - b.monthlyTotalPrice);
+  const sortedPricingData = [...pricingData].sort((a, b) => b.monthlyTotalPrice - a.monthlyTotalPrice);
   
   if (loading) {
     return <div>Loading...</div>;
@@ -46,28 +48,40 @@ const PricingDisplay = () => {
   };
 
   return (
-    <div style={containerStyle}>
-      <h2 style={{ ...textCenterStyle, ...marginBottomStyle }}>Pricing Data</h2>
-      <div style={{ ...textCenterStyle, ...marginBottomStyle }}>
-      </div>
-      {sortedPricingData.length > 0 ? (
-        <div className="pricing-data">
-          {sortedPricingData.map((item, index) => (
-            <div key={index} style={cardStyle}>
-              <p style={cardTextStyle}>{item.description}</p>
-              <p style={cardTextStyle}>Payment Terms: {item.paymentTerms}</p>
-              <p style={cardTextStyle}>Purchase Option: {item.purchaseOption}</p>
-              <p style={cardTextStyle}>Price Per Unit: ${item.pricePerUnit}</p>
-              <p style={cardTextStyle}>Unit: {item.unit}</p>
-              <p style={cardTextStyle}>Lease Contract Length: {item.leaseContractLength}</p>
-              <p style={cardTextStyle}>Upfront Fee: ${item.upfrontFee}</p>
-              <p style={cardTextStyle}>Monthly Total Price: ${item.monthlyTotalPrice.toFixed(2)}</p>
-            </div>
-          ))}
+    <div className='flex flex-col'>
+      <DeployModal />
+      <div className='flex flex-row'>
+        <PricingForm />
+        <div>
+          
         </div>
-      ) : (
-        <div>No pricing data available.</div>
-      )}
+      </div>
+      
+      <div style={containerStyle}>
+        <h2 style={{ ...textCenterStyle, ...marginBottomStyle }}>Pricing Data</h2>
+        <div style={{ ...textCenterStyle, ...marginBottomStyle }}>
+        </div>
+        {sortedPricingData.length > 0 ? (
+          <div className="grid grid-cols-3 grid-flow-row gap-4 pricing-data">
+            {sortedPricingData.map((item, index) =>{
+              if(item.monthlyTotalPrice === 0){return null;}
+              return(
+              <div key={index} style={cardStyle}>
+                <p style={cardTextStyle}>{item.description}</p>
+                <p style={cardTextStyle}>Payment Terms: {item.paymentTerms}</p>
+                <p style={cardTextStyle}>Purchase Option: {item.purchaseOption}</p>
+                <p style={cardTextStyle}>Price Per Unit: ${item.pricePerUnit}</p>
+                <p style={cardTextStyle}>Unit: {item.unit}</p>
+                <p style={cardTextStyle}>Lease Contract Length: {item.leaseContractLength}</p>
+                <p style={cardTextStyle}>Upfront Fee: ${item.upfrontFee}</p>
+                <p style={cardTextStyle}>Monthly Total Price: ${item.monthlyTotalPrice.toFixed(2)}</p>
+              </div>
+            )})}
+          </div>
+        ) : (
+          <div>No pricing data available.</div>
+        )}
+      </div>
     </div>
   );
 };

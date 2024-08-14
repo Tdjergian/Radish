@@ -62,7 +62,10 @@ performanceController.connectUserRedis = async (
 ) => {
  
   console.log('in the connectUserRedis function');
+  const ips = res.locals.user.clusterIPs;
   
+
+
   // try {
   //   console.log(res.locals.user);
   //   const ips = res.locals.user.clusterIPs;
@@ -99,20 +102,20 @@ performanceController.connectUserRedis = async (
     });
 
 
-    // console.log('clusterNodes', clusterNodes);
-    // const redisClient = new Redis.Cluster(clusterNodes, {
-    //   redisOptions: {
-    //     password: req.body.redisPassword || 12345,
-    //   },
-    // });
+    console.log('clusterNodes', clusterNodes);
+    const redisClient = new Redis.Cluster(clusterNodes, {
+      redisOptions: {
+        password: req.body.redisPassword || 12345,
+      },
+    });
 
     // console.log('redisClient', redisClient)
 
-    // redisClient.on('connect', () => {
-    //   console.log('Redis client connected');
-    //   res.locals.redisClient = redisClient;
-    //   // next();
-    // });
+    redisClient.on('connect', () => {
+      console.log('Redis client connected');
+      res.locals.redisClient = redisClient;
+      next();
+    });
 
     // redisClient.on('error', (err: Error) => {
     //   console.error('Redis client connection error:', err);
@@ -124,7 +127,7 @@ performanceController.connectUserRedis = async (
     // });
 
     // res.locals.redisClient = redisClient;
-    next();
+    // next();
 
   } catch (err) {
     return next({
@@ -171,7 +174,7 @@ performanceController.getMemory = async (
       throw new Error('Redis client is not available');
     }
     const stats = await redisClient.info('memory');
-    console.log('stats', stats);
+    // console.log('stats', stats);
     const metrics: string[] = stats.split('\r\n');
     let usedMemory = metrics.find(str => str.startsWith('used_memory_human'));
     let peakUsedMemory = metrics.find(str =>

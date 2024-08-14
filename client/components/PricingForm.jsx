@@ -35,7 +35,7 @@ const operatingSystems = [
   'Ubuntu Pro',
 ];
 
-const PricingForm = () => {
+const PricingForm = ({onDisplayScreen}) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const PricingForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ region, serverType, operatingSystem, shardsValue, replicasValue }),
+        body: JSON.stringify({ region, serverType, operatingSystem, shardsValue, replicasValue: replicasValue + 1}),
       });
 
       if (!response.ok) {
@@ -94,7 +94,20 @@ const PricingForm = () => {
   };
 
   return (
-    <div className="w-full container bg-black text-white p-4">
+    <div className="flex w-full container bg-black text-white space-x-20">
+      <div className=''>
+        <h2 className="text-center text-3xl section-header font-bold">Redis Configuration</h2>
+        <div className='text-2xl pt-10'>
+          <label className="text-white">Shards:{shardsValue}</label>
+        </div>
+        <div className='text-2xl pt-5'>
+          <label className="text-white">Replicas:{replicasValue}</label>
+        </div>
+        <div className='text-3xl pt-10'>
+          <label className="border border-2 p-4 border-red text-white">Total Nodes:{shardsValue * (replicasValue+1)}</label>
+        </div>
+      </div>
+      <div>
       <h2 className="text-center text-3xl section-header font-bold">AWS Deployment Pricing</h2>
       <div className="dropdown-container mt-4">
         <div className="dropdown-menu">
@@ -147,7 +160,7 @@ const PricingForm = () => {
         </button>
         {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>
-      <DeployModal />
+      </div>
     </div>
   );
 };
