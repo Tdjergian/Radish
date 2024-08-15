@@ -2,6 +2,7 @@ import React, { useState, FC, ReactElement } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../Redux/store";
 import { setCurrentIps } from "../Redux/slices/realClusterData";
+import { toast } from "react-toastify";
 
 const DeployModal: FC = ():ReactElement => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,13 @@ const DeployModal: FC = ():ReactElement => {
   const sliderState = useAppSelector((state) => state.slider);
 
   const closeModal = () => {setShow(false)};
-  const openModal = () => {setShow(true)};
+  const openModal = () => {
+    if(redisState.masterAuth === ''){
+      toast.error('Please fill out the Redis Configuration form before deploying your cluster');
+      return;
+    }
+    setShow(true)
+  };
 
   const createEC2Cluster = async () => {
 
@@ -63,7 +70,7 @@ const DeployModal: FC = ():ReactElement => {
   return (
   <div>
       <div>
-        <Button className='mb-10 w-full mt-4 bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={openModal} variant="danger">Ready to Build!</Button>
+        <Button className='mb-10 w-full mt-4 bg-red-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' onClick={openModal} variant="danger">Ready to Build!</Button>
       </div>
       <Modal id='modal-container' className='fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity' show={show} onHide={closeModal}> 
         <div className='flex items-center justify-center min-h-screen p-4'>

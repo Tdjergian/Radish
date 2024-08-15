@@ -7,8 +7,19 @@ const PricingDisplay = () => {
   const pricingData = useSelector((state) => state.aws.pricingData);
   const loading = useSelector((state) => state.aws.loading);
   const error = useSelector((state) => state.aws.error);
+  const shardsValue = useSelector(state => state.slider.shardsValue);
+  const replicasValue = useSelector(state => state.slider.replicasValue);
 
   const sortedPricingData = [...pricingData].sort((a, b) => b.monthlyTotalPrice - a.monthlyTotalPrice);
+  // console.log('sortedPricingData', sortedPricingData)
+  const filteredPricingData = sortedPricingData.filter(item => item.monthlyTotalPrice !== 0);
+  // console.log('filteredPricingData', filteredPricingData)
+
+  const minMonthlyPrice = filteredPricingData[filteredPricingData.length - 1].monthlyTotalPrice.toFixed(2);
+  const maxMonthlyPrice = filteredPricingData[0].monthlyTotalPrice.toFixed(2);
+
+  console.log('minMonthlyPrice', minMonthlyPrice);
+  console.log('maxMonthlyPrice', maxMonthlyPrice);
   
   if (loading) {
     return <div>Loading...</div>;
@@ -52,8 +63,11 @@ const PricingDisplay = () => {
       <DeployModal />
       <div className='flex flex-row'>
         <PricingForm />
-        <div>
-          
+        <div className='flex flex-col items-center justify-center'>
+          <p>Expected price per node: </p>
+          <p className='text-2xl border border-2 p-2'>${minMonthlyPrice} - ${maxMonthlyPrice}</p>
+          <p>Expected total monthly price:</p>
+          <p className='text-2xl border border-2 p-2'>${(minMonthlyPrice*shardsValue*(replicasValue+1)).toFixed(2)} - ${(maxMonthlyPrice*shardsValue*(replicasValue+1)).toFixed(2)}</p>
         </div>
       </div>
       
@@ -63,8 +77,8 @@ const PricingDisplay = () => {
         </div>
         {sortedPricingData.length > 0 ? (
           <div className="grid grid-cols-3 grid-flow-row gap-4 pricing-data">
-            {sortedPricingData.map((item, index) =>{
-              if(item.monthlyTotalPrice === 0){return null;}
+            {filteredPricingData.map((item, index) =>{
+              if(item === null){return null;}
               return(
               <div key={index} style={cardStyle}>
                 <p style={cardTextStyle}>{item.description}</p>

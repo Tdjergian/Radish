@@ -7,12 +7,11 @@ const bodyParser = require('body-parser');
 const { createClient } = require('redis');
 const { createFiles } = require('./controllers/fileGenerationController');
 const { getEC2Pricing } = require('./controllers/awsPricingController');
-const {checkUser, verifyCookie} = require('./controllers/authController');
+const { checkUser, verifyCookie } = require('./controllers/authController');
 const { saveCluster } = require('./controllers/userController');
 const Redis = require('ioredis');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-
 
 const {
   connectUserRedis,
@@ -41,7 +40,6 @@ const connectDB = async () => {
 };
 
 connectDB();
-
 
 const app = express();
 const port = 8080;
@@ -106,10 +104,9 @@ app.post('/api/createFiles', createFiles, (req: Request, res: Response) => {
 
 // Post route to handle the fetching of EC2 pricing given inputs from the front end
 app.post('/api/getPricing', getEC2Pricing, (req: Request, res: Response) => {
-console.log('sending pricing terms array');
+  console.log('sending pricing terms array');
   res.status(200).json(res.locals.pricingTermsArray);
 });
-
 
 app.post('/api/createTaskDefinition', (req: Request, res: Response) => {
   res.status(200).send('Task definition created successfully');
@@ -119,7 +116,8 @@ app.post(
   '/api/memory',
   checkUser,
   connectUserRedis,
-  /*connectUserRedis,*/ getMemory,
+  getMemory,
+	disconnectRedis,
   /*disconnectRedis,*/ (req, res) => {
     //res.status(200).send("connect to redis");
     console.log('backend', res.locals.memory);
@@ -131,17 +129,15 @@ app.post(
 app.post(
   '/api/cpu',
     checkUser,
-  connectUserRedis,
-
-  /*connectUserRedis,*/ getUsedCPU,
-  /*disconnectRedis,*/ (req, res) => {
+  	connectUserRedis,
+		getUsedCPU,
+		disconnectRedis,
+	(req, res) => {
     //res.status(200).send("connect to redis");
     console.log('back end', res.locals.getUsedCPU);
     res.status(200).json(res.locals.getUsedCPU);
   }
 );
-
-
 
 app.post(
   '/api/testSecurityGroup',
@@ -198,12 +194,20 @@ app.get(
 		}
 	}, (req: Request, res: Response) => {console.log('res.locals.user', res.locals.user); res.status(200).json(res.locals.user)});
 
-app.post("/api/testRequestBody", (req: Request, res: Response) => {console.log(req.body); res.status(200).send("Request Body Received")});
+app.post('/api/testRequestBody', (req: Request, res: Response) => {
+  console.log(req.body);
+  res.status(200).send('Request Body Received');
+});
 
-app.get('/api/benchmark', verifyCookie, runBenchmark, (req: Request, res: Response) => {
+app.get(
+  '/api/benchmark',
+  verifyCookie,
+  runBenchmark,
+  (req: Request, res: Response) => {
     console.log('backend', res.locals.benchmark);
     res.status(200).json(res.locals.benchmark);
-  });
+  }
+);
 
 //add connectUserRedis if connect to redis cloud
 

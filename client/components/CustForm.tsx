@@ -1,7 +1,8 @@
-import React, { FC, ReactElement, useRef } from "react";
+import React, { FC, ReactElement, useRef, FormEvent } from "react";
 import "../../public/style.css";
 import { useAppSelector, useAppDispatch } from "../Redux/store";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../Redux/store";
 // import { Tooltip } from 'chart.js';
 import { Tooltip } from "react-tooltip";
@@ -26,18 +27,25 @@ import {
 const RedisForm: FC = (): ReactElement => {
   const sliderState = useSelector((state: RootState) => state.slider);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formRef = useRef(null);
   // console.log("redisState", redisState);
 
+  const submitForm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate('/pricing')
+  };
+
   return (
     <>
       <form
-        id="redis-form"
-        action="/api/createFiles"
-        method="POST"
-        className="p-0"
-        ref={formRef}
+        // id="redis-form"
+        // action="/api/createFiles"
+        // method="POST"
+        // className="p-0"
+        // ref={formRef}
+        onSubmit = {submitForm}
       >
         {/* <h1 id="redis-conf-header">redis.conf customization</h1> */}
         {/* <h2>Administration</h2> */}

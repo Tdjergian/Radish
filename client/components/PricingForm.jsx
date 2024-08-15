@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setRegion, setServerType, setOperatingSystem, setPricingData, setLoading, setError } from '../Redux/slices/awsSlice';
 import DeployModal from './DeployModal';
+import { Button } from 'react-bootstrap'
 
 const regions = [
   'US East (N. Virginia)',
@@ -45,6 +46,10 @@ const PricingForm = ({onDisplayScreen}) => {
   const error = useSelector((state) => state.aws.error); 
   const shardsValue = useSelector(state => state.slider.shardsValue);
   const replicasValue = useSelector(state => state.slider.replicasValue);
+
+  const returnToRedisConfig = () => {
+    navigate('/configuration');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,17 +99,20 @@ const PricingForm = ({onDisplayScreen}) => {
   };
 
   return (
-    <div className="flex w-full container bg-black text-white space-x-20">
+    <div className="flex w-full p-5 container bg-black text-white space-x-20">
       <div className=''>
         <h2 className="text-center text-3xl section-header font-bold">Redis Configuration</h2>
         <div className='text-2xl pt-10'>
-          <label className="text-white">Shards:{shardsValue}</label>
+          <label className="text-white">Shards : {shardsValue}</label>
         </div>
         <div className='text-2xl pt-5'>
-          <label className="text-white">Replicas:{replicasValue}</label>
+          <label className="text-white">Replicas : {replicasValue}</label>
         </div>
         <div className='text-3xl pt-10'>
-          <label className="border border-2 p-4 border-red text-white">Total Nodes:{shardsValue * (replicasValue+1)}</label>
+          <label className="border border-2 p-4 border-red text-white">Total Nodes : {shardsValue * (replicasValue+1)}</label>
+        </div>
+        <div className='pt-10'>
+          <button className='btn-secondary hover:bg-blue-500 block text-white border border-blue-500 bg-opacity-90 rounded-md py-2 ml-auto rounded-full px-8' onClick={returnToRedisConfig}>Return to Redis Configuration</button>
         </div>
       </div>
       <div>
@@ -156,7 +164,7 @@ const PricingForm = ({onDisplayScreen}) => {
           onClick={handleSubmit}
           className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Submit
+          Get Pricing
         </button>
         {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>
