@@ -43,7 +43,7 @@ const RedisForm: FC = (): ReactElement => {
         // id="redis-form"
         // action="/api/createFiles"
         // method="POST"
-        // className="p-0"
+        className="p-0"
         // ref={formRef}
         onSubmit = {submitForm}
       >
