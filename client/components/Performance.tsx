@@ -1,4 +1,7 @@
 import React, { useEffect, useState, ReactElement, FC } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import {
@@ -11,8 +14,11 @@ import {
 } from '@mui/material';
 import { MemoryData, CPUData, BenchmarkData } from '../../types/types';
 import { cpuUsage } from 'process';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../Redux/store';
 
 const Performance: FC = (): ReactElement => {
+  const navigate = useNavigate();
   const [memoryData, setMemoryData] = useState<MemoryData>({
     usedMemory: 0,
     peakUsedMemory: 0,
@@ -24,44 +30,53 @@ const Performance: FC = (): ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchMemoryData = async () => {
-  //     try {
-  //       const response = await fetch('/api/memory', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //       });
-  //       console.log(`response`, response);
-  //       if (!response.ok) {
-  //         throw new Error(`memory front end error ${response.status}`);
-  //       }
-  //       const data: MemoryData = await response.json();
-  //       setMemoryData(data);
-  //     } catch (err) {
-  //       console.error(`Error fetching memory data:`, err);
-  //     }
-  //   };
+  const userState = useAppSelector((state) => state.user);
+  console.log(`userState`, userState);
+  useEffect(() => {
+    if (!userState.user){
+      toast.error('Please login or build a cluster to run performance benchmarking');
+      navigate('/login');
+    }
+  },[]);
 
-  //   const fetchCPUData = async () => {
-  //     try {
-  //       const response = await fetch('/api/cpu', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //       });
+  useEffect(() => {
+    const fetchMemoryData = async () => {
+      try {
+        const response = await fetch('/api/memory', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        console.log(`response`, response);
+        if (!response.ok) {
+          throw new Error(`memory front end error ${response.status}`);
+        }
+        const data: MemoryData = await response.json();
+        setMemoryData(data);
+      } catch (err) {
+        console.error(`Error fetching memory data:`, err);
+      }
+    };
 
-  //       if (!response.ok) {
-  //         throw new Error(`cpu front end error ${response.status}`);
-  //       }
-  //       const data: CPUData = await response.json();
-  //       console.log(`data`, data);
-  //       setCPUData(data);
-  //     } catch (err) {
-  //       console.error(`Error fetching cpu data`, err);
-  //     }
-  //   };
-  //   fetchMemoryData();
-  //   fetchCPUData();
-  // }, []);
+    const fetchCPUData = async () => {
+      try {
+        const response = await fetch('/api/cpu', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+          throw new Error(`cpu front end error ${response.status}`);
+        }
+        const data: CPUData = await response.json();
+        console.log(`data`, data);
+        setCPUData(data);
+      } catch (err) {
+        console.error(`Error fetching cpu data`, err);
+      }
+    };
+    fetchMemoryData();
+    fetchCPUData();
+  }, []);
 
   const runBenchmark = async () => {
     setLoading(true);
@@ -160,7 +175,10 @@ const Performance: FC = (): ReactElement => {
       {!loading && !BenchmarkData && (
         <p>No data yet. Click the button to run the benchmark.</p>
       )}
+      
+        {/* <ToastContainer /> */}
     </div>
+    
   );
 };
 

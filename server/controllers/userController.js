@@ -90,7 +90,9 @@ const saveCluster = async (req, res, next) => {
     subnetId,
     amiPublicKey,
     amiSecretKey,
-    region
+    region,
+    masterAuth,
+
   } = req.body;
   
   if(!res.locals.user) {next()}
@@ -102,7 +104,8 @@ try{
     amiPublicKey: amiPublicKey,
     amiSecretKey: amiSecretKey,
     region: region,
-    clusterIPs: res.locals.ips
+    clusterIPs: res.locals.ips,
+    clusterPassword: masterAuth
   }, {new: true});
 
   console.log('user after set', user);
@@ -118,7 +121,7 @@ catch (error) {
 const getClusterIps = async (req, res, next) => {
 
   try{
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(res.locals.user.id);
     res.locals.ips = user.clusterIPs;
     next();
 

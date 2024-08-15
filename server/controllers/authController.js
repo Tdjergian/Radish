@@ -63,12 +63,12 @@ const checkUser = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select('-password');
-    console.log('user', user);
+    // console.log('user', user);
     if(!user) {
       next();
     }
     res.locals.user = user;
-    console.log('res.locals.user', res.locals.user);
+    // console.log('res.locals.user', res.locals.user);
     next();
   }catch (error) {
     next(error);

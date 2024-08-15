@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
   clusterIPs: {
     type: Array,
     required: false
+  }, 
+  clusterPassword: {
+    type: String,
+    required: false
   }
 },
 {

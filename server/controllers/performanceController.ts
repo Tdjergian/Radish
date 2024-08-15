@@ -97,20 +97,20 @@ performanceController.connectUserRedis = async (
       });
     });
 
-    // console.log('clusterNodes', clusterNodes);
-    // const redisClient = new Redis.Cluster(clusterNodes, {
-    //   redisOptions: {
-    //     password: req.body.redisPassword || 12345,
-    //   },
-    // });
+    console.log('clusterNodes', clusterNodes);
+    const redisClient = new Redis.Cluster(clusterNodes, {
+      redisOptions: {
+        password: req.body.redisPassword || 12345,
+      },
+    });
 
     // console.log('redisClient', redisClient)
 
-    // redisClient.on('connect', () => {
-    //   console.log('Redis client connected');
-    //   res.locals.redisClient = redisClient;
-    //   // next();
-    // });
+    redisClient.on('connect', () => {
+      console.log('Redis client connected');
+      res.locals.redisClient = redisClient;
+      next();
+    });
 
     // redisClient.on('error', (err: Error) => {
     //   console.error('Redis client connection error:', err);
@@ -122,7 +122,8 @@ performanceController.connectUserRedis = async (
     // });
 
     // res.locals.redisClient = redisClient;
-    next();
+    // next();
+
   } catch (err) {
     return next({
       log: `redisController.connectUserRedis error ${err}`,
@@ -140,6 +141,7 @@ performanceController.disconnectRedis = async (
   console.log('in the disconnectRedis function');
   try {
     await res.locals.redisClient.disconnect();
+    next();
   } catch (err) {
     return next({
       log: `redisController.disconnectRedis error ${err}`,
@@ -168,7 +170,7 @@ performanceController.getMemory = async (
       throw new Error('Redis client is not available');
     }
     const stats = await redisClient.info('memory');
-    console.log('stats', stats);
+    // console.log('stats', stats);
     const metrics: string[] = stats.split('\r\n');
     let usedMemory = metrics.find(str => str.startsWith('used_memory_human'));
     let peakUsedMemory = metrics.find(str =>
@@ -236,10 +238,11 @@ performanceController.runBenchmark = async (
 
   const host = process.env.HOST || 'localhost';
   const port = process.env.PORT || 6379;
-  const num_clients = 100;
-  const num_requests = 300;
+  const num_clients = 50;
+  const num_requests = 3000;
   const tests = 'set,get';
-  const password = process.env.REDIS_PASSWORD || 12345;
+  const password = res.locals.user.clusterPassword
+  console.log('password', password)
   console.log('inside benchmark');
   // const command = `redis-benchmark -h ${host} -p ${port} -a ${password} -c ${num_clients} -n ${num_requests} -t ${tests}`;
   // cluster mode

@@ -34,7 +34,8 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
               { Type: 'TERM_MATCH', Field: 'productFamily', Value: 'Compute Instance' },
               { Type: 'TERM_MATCH', Field: 'location', Value: region },
               { Type: 'TERM_MATCH', Field: 'preInstalledSw', Value: 'NA' },
-              { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }
+              { Type: 'TERM_MATCH', Field: 'operatingSystem', Value: operatingSystem }, 
+            //   { Type: 'TERM_MATCH', Field: 'termType', Value: 'OnDemand'}
           ]
       };
 
@@ -44,6 +45,7 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
 
       const priceList = data.PriceList;
       console.log('Number of products:', priceList.length)
+      console.log('pricing data:', priceList)
 
       // Ask Jay about what this data actually looks like
 
@@ -132,7 +134,7 @@ awsPricingController.getEC2Pricing = async (req: Request, res: Response, next: N
                   }
               }
           }
-      })
+      });
 
       // console.log(pricingTermsArray);
       res.locals.pricingTermsArray = pricingTermsArray;
