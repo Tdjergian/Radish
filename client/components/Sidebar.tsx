@@ -12,7 +12,7 @@ const Sidebar: FC = (): ReactElement => {
   const navigation = [
     { name: 'Configuration', href: '/configuration', icon: GrDocumentConfig },
     { name: 'Pricing', href: '/pricing', icon: GiDiamondTrophy },
-    { name: 'AWS Deployment', href: '/aws', icon: IoIosCloud },
+    // { name: 'AWS Deployment', href: '/aws', icon: IoIosCloud },
     { name: 'Performance', href: '/performance', icon: MdOutlineMonitorHeart },
   ];
 

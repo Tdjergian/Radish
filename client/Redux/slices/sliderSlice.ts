@@ -9,8 +9,8 @@ interface SliderState {
 
 const initialState: SliderState = {
   sentinelsValue:1,
-  shardsValue:2,
-  replicasValue:3
+  shardsValue:3,
+  replicasValue:2
 };
 
 

@@ -47,7 +47,7 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
  
   const securityGroupParams: {Description: string; GroupName: string; VpcId: String} = {
     Description: 'Security group for Redis Cluster',
-    GroupName: 'RedisClusterSecurityGroup2',
+    GroupName: 'RedisClusterSecurityGroup12',
     VpcId: vpcID
   };
 
@@ -107,7 +107,7 @@ awsSDKController.createSecurityGroup = async (req: Request, res: Response, next:
 awsSDKController.launchEC2s = async (req: Request, res: Response, next: NextFunction) => {
   console.log('in launch EC2s')
   const {
-    subnetID,
+    subnetId,
     vpcID,
     region,
     instanceType,
@@ -169,7 +169,7 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --dir ./ --cl
       Groups: [res.locals.securityGroupId],
       DeviceIndex: 0,
       AssociatePublicIpAddress: true,
-      subnetId: subnetID,
+      SubnetId: subnetId,
     }]
   };
   console.log('ec2Params: ', ec2Params)
@@ -229,7 +229,7 @@ redis-server --cluster-enabled yes --protected-mode no --port 6379 --dir ./ --cl
         Groups: [res.locals.securityGroupId],
         DeviceIndex: 0,
         AssociatePublicIpAddress: true,
-        SubnetId: subnetID,
+        SubnetId: subnetId,
       }]
     };
 

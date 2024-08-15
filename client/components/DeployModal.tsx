@@ -29,26 +29,8 @@ const DeployModal: FC = ():ReactElement => {
   };
 
   const createEC2Cluster = async () => {
-
-
-    console.log('req.body: ', {
-      clusterName,
-      amiPublicKey,
-      amiSecretKey,
-      vpcID,
-      subnetId,
-      keyPairName,
-      ...redisState,
-      ...awsState,
-      ...sliderState,
-    })
-    const response = await fetch('/api/testSecurityGroupAndEC2Launch', 
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try{
+      console.log('req.body: ', {
         clusterName,
         amiPublicKey,
         amiSecretKey,
@@ -58,10 +40,36 @@ const DeployModal: FC = ():ReactElement => {
         ...redisState,
         ...awsState,
         ...sliderState,
-      }),
-    });
-    const ips = await response.json();
-    dispatch(setCurrentIps(ips));
+      })
+      toast.info('Creating your cluster, this may take a few minutes...');
+      closeModal();
+      const response = await fetch('/api/testSecurityGroupAndEC2Launch', 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          clusterName,
+          amiPublicKey,
+          amiSecretKey,
+          vpcID,
+          subnetId,
+          keyPairName,
+          ...redisState,
+          ...awsState,
+          ...sliderState,
+        }),
+      });
+      const ips = await response.json();
+      dispatch(setCurrentIps(ips));
+      toast.success('Cluster created successfully! Navigate to the Benchmarking tab to run performance tests.');
+
+    }catch(err){
+
+    }
+
+   
 
   };
 
