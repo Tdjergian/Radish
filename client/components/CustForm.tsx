@@ -43,7 +43,7 @@ const RedisForm: FC = (): ReactElement => {
         // id="redis-form"
         // action="/api/createFiles"
         // method="POST"
-        // className="p-0"
+        className="p-0"
         // ref={formRef}
         onSubmit = {submitForm}
       >
@@ -92,7 +92,7 @@ const RedisForm: FC = (): ReactElement => {
               data-tooltip-content="The password used for authenticating the Redis replica (slave) with the master instance in each shard.  If your Redis cluster setup involves replication, the 'masterauth' parameter will be added to each replica's config file."
               className="text-xl"
             >
-              Masterauth password (REQUIRED)
+              Requirepass password (REQUIRED)
             </a>
             <Tooltip id="masterauth" className="tooltip" />
             <label htmlFor="masterauth"></label>
@@ -407,7 +407,7 @@ const RedisForm: FC = (): ReactElement => {
               <option value="allkeys-random">allkey-random</option>
             </select>
             <button type="submit" className="btn-primary mt-4 text-xl">
-              Generate Redis Config
+              Submit and move to pricing confirmation
             </button>
           </div>
         </div>

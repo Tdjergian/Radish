@@ -17,7 +17,7 @@ const redisFormSlice = createSlice({
     rdbcompression: true,
     rdbchecksum: true, 
     resplicaServeStaleData: true,
-    maxmemory: 5368709120,
+    maxmemory: 5000000000,
     maxmemoryPolicy: 'noeviction',
 
 

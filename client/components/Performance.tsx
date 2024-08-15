@@ -1,5 +1,6 @@
 import React, { useEffect, useState, ReactElement, FC } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
+import { ClipLoader } from 'react-spinners';
 
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
@@ -172,11 +173,15 @@ const Performance: FC = (): ReactElement => {
           </div>
         </div>
       )}
-      {!loading && !BenchmarkData && (
-        <p>No data yet. Click the button to run the benchmark.</p>
-      )}
+      <div className='flex justify-center items-center mt-20'>
+      <ClipLoader 
+        color={'red'}
+        loading={loading}
+        size={150}/>
+      </div>
+        
       
-        {/* <ToastContainer /> */}
+       
     </div>
     
   );
